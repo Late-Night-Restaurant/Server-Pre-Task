@@ -1,2 +1,2 @@
-# Server-Pre-Task
-Late Night Restaurant Server Pre Task Repository
+# backend-pre-task
+Late Night Restaurant Backend Pre Task Repository
