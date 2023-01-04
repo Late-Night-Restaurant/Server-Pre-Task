@@ -8,6 +8,7 @@ class OauthloginApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
