@@ -1,11 +1,11 @@
 package com.backend.oauthlogin.dto;
 
+import com.backend.oauthlogin.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jjun.server.jwttutorial.entity.User;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.stream.Collectors;
 

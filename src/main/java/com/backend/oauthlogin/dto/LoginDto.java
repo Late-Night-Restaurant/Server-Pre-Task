@@ -1,8 +1,9 @@
 package com.backend.oauthlogin.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * 로그인에 필요한 정보를 주고받는 DTO 객체

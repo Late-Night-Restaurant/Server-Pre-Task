@@ -1,6 +1,6 @@
 package com.backend.oauthlogin.repository;
 
-import jjun.server.jwttutorial.entity.RefreshToken;
+import com.backend.oauthlogin.entity.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

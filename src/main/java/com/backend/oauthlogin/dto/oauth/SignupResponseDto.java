@@ -1,6 +1,6 @@
 package com.backend.oauthlogin.dto.oauth;
 
-import jjun.server.jwttutorial.entity.Account;
+import com.backend.oauthlogin.entity.Account;
 import lombok.Data;
 
 @Data

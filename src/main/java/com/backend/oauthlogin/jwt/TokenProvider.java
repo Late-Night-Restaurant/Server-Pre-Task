@@ -1,11 +1,11 @@
 package com.backend.oauthlogin.jwt;
 
+import com.backend.oauthlogin.dto.TokenDto;
+import com.backend.oauthlogin.entity.Authority;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-import jjun.server.jwttutorial.dto.TokenDto;
-import jjun.server.jwttutorial.entity.Authority;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

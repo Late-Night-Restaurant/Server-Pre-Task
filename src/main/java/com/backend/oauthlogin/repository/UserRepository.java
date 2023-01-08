@@ -1,10 +1,11 @@
 package com.backend.oauthlogin.repository;
 
-import jjun.server.jwttutorial.entity.User;
+import com.backend.oauthlogin.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+
 
 /**
  * User 엔티티에 매핑되는 레포지토리

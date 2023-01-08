@@ -1,7 +1,7 @@
 package com.backend.oauthlogin.service;
 
-import jjun.server.jwttutorial.entity.User;
-import jjun.server.jwttutorial.repository.UserRepository;
+import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.GrantedAuthority;
