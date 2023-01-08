@@ -79,7 +79,6 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**").permitAll()
-                .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .anyRequest().authenticated()
 
                 .and()
@@ -91,8 +90,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers("/h2-console/**", "/favicon.ico")
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+                .antMatchers("/h2-console/**", "/favicon.ico", "/error");
     }
 
 }
