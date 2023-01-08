@@ -17,6 +17,24 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -49,6 +67,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2JsH5tH9mFmUW7P5Zf8H9PHUryW" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="foldersAlwaysOnTop" value="false" />
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -131,6 +152,14 @@
       <workItem from="1673187364568" duration="2279000" />
       <workItem from="1673195102588" duration="3922000" />
     </task>
+    <task id="LOCAL-00001" summary="[refactor] : user Entity 수정">
+      <created>1673199240683</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1673199240684</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,6 +175,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[refactor] : user Entity 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="[refactor] : user Entity 수정" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
