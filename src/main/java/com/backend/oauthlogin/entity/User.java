@@ -1,10 +1,13 @@
 package com.backend.oauthlogin.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import lombok.*;
 
 
 import javax.persistence.*;
 import java.util.Set;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity    // @Entity 어노테이션: 자동으로 JPA 연동
@@ -24,6 +27,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private SocialLoginType socialLoginType;
+
     @Column(name = "username", length = 50, unique = true)
     private String username;
 
@@ -36,12 +42,18 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "activated")
     private boolean activated;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_authority",
+//            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+//    private Set<Authority> authorities;
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -63,4 +75,4 @@ public class User extends BaseTimeEntity implements UserDetails {
         return false;
     }
 }
-// Profile -> 연관관계 매핑 고려해서 클래스 생성할 예정 !
+// Profile -> 연관관계 매핑 고려해서 클래스 생성할 예ㄷ !

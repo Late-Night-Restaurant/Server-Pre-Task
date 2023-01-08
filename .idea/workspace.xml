@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45beecc4-1774-4f38-9384-d7cd2450a04f" name="Changes" comment="[refactor] : user Entity 수정">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Role.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +115,7 @@
       <workItem from="1673084201149" duration="12000" />
       <workItem from="1673098455407" duration="1906000" />
       <workItem from="1673187364568" duration="2279000" />
-      <workItem from="1673190445965" duration="8090000" />
+      <workItem from="1673190445965" duration="8788000" />
     </task>
     <task id="LOCAL-00001" summary="[refactor] : user Entity 수정">
       <created>1673199240683</created>
