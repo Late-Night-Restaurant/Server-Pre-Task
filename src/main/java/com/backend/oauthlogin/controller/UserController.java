@@ -1,14 +1,14 @@
 package com.backend.oauthlogin.controller;
 
-import jakarta.validation.Valid;
-import jjun.server.jwttutorial.config.BaseResponse;
-import jjun.server.jwttutorial.dto.UserDto;
-import jjun.server.jwttutorial.entity.User;
-import jjun.server.jwttutorial.service.UserService;
+import com.backend.oauthlogin.config.BaseResponse;
+import com.backend.oauthlogin.dto.UserDto;
+import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")

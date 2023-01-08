@@ -1,10 +1,10 @@
 package com.backend.oauthlogin.config;
 
-import jjun.server.jwttutorial.jwt.JwtAccessDeniedHandler;
-import jjun.server.jwttutorial.jwt.JwtAuthenticationEntryPoint;
-import jjun.server.jwttutorial.jwt.JwtSecurityConfig;
-import jjun.server.jwttutorial.jwt.TokenProvider;
-import lombok.RequiredArgsConstructor;
+
+import com.backend.oauthlogin.jwt.JwtAccessDeniedHandler;
+import com.backend.oauthlogin.jwt.JwtAuthenticationEntryPoint;
+import com.backend.oauthlogin.jwt.JwtSecurityConfig;
+import com.backend.oauthlogin.jwt.TokenProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -78,7 +78,7 @@ public class SecurityConfig {
                 // token이 없는 상태에서 요청되는 로그인, 회원가입 API는 permitAll로 설정
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**").permitAll()
+                .antMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**").permitAll()
                 .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .anyRequest().authenticated()
 
@@ -91,7 +91,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .requestMatchers("/h2-console/**", "/favicon.ico")
+                .antMatchers("/h2-console/**", "/favicon.ico")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 

@@ -1,12 +1,11 @@
 package com.backend.oauthlogin.controller;
 
-import jakarta.validation.Valid;
-import jjun.server.jwttutorial.config.BaseResponse;
-import jjun.server.jwttutorial.dto.LoginDto;
-import jjun.server.jwttutorial.dto.TokenDto;
-import jjun.server.jwttutorial.dto.TokenRequestDto;
-import jjun.server.jwttutorial.jwt.JwtFilter;
-import jjun.server.jwttutorial.service.AuthService;
+import com.backend.oauthlogin.config.BaseResponse;
+import com.backend.oauthlogin.dto.LoginDto;
+import com.backend.oauthlogin.dto.TokenDto;
+import com.backend.oauthlogin.dto.TokenRequestDto;
+import com.backend.oauthlogin.jwt.JwtFilter;
+import com.backend.oauthlogin.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 
 @RestController

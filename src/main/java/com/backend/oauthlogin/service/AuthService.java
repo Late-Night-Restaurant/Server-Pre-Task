@@ -1,15 +1,15 @@
 package com.backend.oauthlogin.service;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jjun.server.jwttutorial.dto.LoginDto;
-import jjun.server.jwttutorial.dto.TokenDto;
-import jjun.server.jwttutorial.dto.TokenRequestDto;
-import jjun.server.jwttutorial.dto.oauth.SignupRequestDto;
-import jjun.server.jwttutorial.entity.Account;
-import jjun.server.jwttutorial.entity.RefreshToken;
-import jjun.server.jwttutorial.jwt.TokenProvider;
-import jjun.server.jwttutorial.repository.AccountRepository;
-import jjun.server.jwttutorial.repository.RefreshTokenRepository;
+
+import com.backend.oauthlogin.dto.LoginDto;
+import com.backend.oauthlogin.dto.TokenDto;
+import com.backend.oauthlogin.dto.TokenRequestDto;
+import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
+import com.backend.oauthlogin.entity.Account;
+import com.backend.oauthlogin.entity.RefreshToken;
+import com.backend.oauthlogin.jwt.TokenProvider;
+import com.backend.oauthlogin.repository.AccountRepository;
+import com.backend.oauthlogin.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +17,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @Slf4j

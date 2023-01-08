@@ -1,16 +1,15 @@
 package com.backend.oauthlogin.service;
 
-import jjun.server.jwttutorial.dto.UserDto;
-import jjun.server.jwttutorial.entity.Authority;
-import jjun.server.jwttutorial.entity.User;
-import jjun.server.jwttutorial.repository.UserRepository;
-import jjun.server.jwttutorial.util.SecurityUtil;
+import com.backend.oauthlogin.dto.UserDto;
+import com.backend.oauthlogin.entity.Authority;
+import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.repository.UserRepository;
+import com.backend.oauthlogin.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 

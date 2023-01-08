@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static jjun.server.jwttutorial.config.BaseResponseStatus.SUCCESS;
+import static com.backend.oauthlogin.config.BaseResponseStatus.SUCCESS;
 
 @Getter
 @AllArgsConstructor
