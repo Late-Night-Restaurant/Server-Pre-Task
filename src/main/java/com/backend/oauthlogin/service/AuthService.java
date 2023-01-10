@@ -61,7 +61,7 @@ public class AuthService {
 
         // 4. Refresh Token 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(Long.valueOf(authentication.getName()))
+                .key(Long.valueOf(authentication.getName()))  // TODO authentication.getName() 이 Long Type 을 반환하는가?
                 .value(tokenDto.getRefreshToken())
                 .build();
 
@@ -129,8 +129,12 @@ public class AuthService {
      */
     public TokenDto oauthSignup(SignupRequestDto requestDto) {
         User user = requestDto.getUser();
-        return tokenProvider.createToken(account.getEmail());
+        return tokenProvider.createToken(user.getEmail());
     }
 
+
+    public User findUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow();
+    }
 
 }

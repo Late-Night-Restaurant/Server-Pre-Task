@@ -3,9 +3,7 @@ package com.backend.oauthlogin.service;
 import com.backend.oauthlogin.config.BaseException;
 import com.backend.oauthlogin.config.BaseResponseStatus;
 import com.backend.oauthlogin.dto.TokenDto;
-import com.backend.oauthlogin.dto.oauth.LoginResponseDto;
 import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
-import com.backend.oauthlogin.dto.oauth.SignupResponseDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoAccountDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoTokenDto;
 import com.backend.oauthlogin.entity.RefreshToken;
@@ -22,7 +20,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -129,29 +126,21 @@ public class OauthService {
                 .build();
     }
 
-    // 로그인 로직 : 이전에 회원가입을 한 적이 있는지를 판단하여 분기 처리
-    // TODO 헤더와 바디를 구성하는 ResponseEntity 는 바깥으로 빼기
-    public ResponseEntity<LoginResponseDto> kakaoLogin(String kakaoAccessToken) {
-        // Kakao Access Token 으로 회원정보 받아오기
-        User user = getKakaoInfo(kakaoAccessToken);
+    public User saveKakaoUser(SignupRequestDto requestDto) {
 
-        LoginResponseDto loginResponseDto = new LoginResponseDto();
-        loginResponseDto.setKakaoAccessToken(kakaoAccessToken);
-        loginResponseDto.setUser(user);
+        User newUser = User.builder()
+                .email(requestDto.getUser().getEmail())
+                .password("change your password!")
+                .socialLoginType(KAKAO)
+                .role(ROLE_USER)
+                .activated(true)
+                .build();
+        userRepository.save(newUser);
 
-        try {
-            TokenDto tokenDto = authService.authenticate(user.getEmail());
-            loginResponseDto.setLoginSuccess(true);
-
-            HttpHeaders headers = setTokenHeaders(tokenDto);
-            return ResponseEntity.ok().headers(headers).body(loginResponseDto);
-        } catch (Exception e) {
-            loginResponseDto.setLoginSuccess(false);
-            return ResponseEntity.ok(loginResponseDto);
-        }
+        return newUser;
     }
 
-    private HttpHeaders setTokenHeaders(TokenDto tokenDto) {
+    public HttpHeaders setTokenHeaders(TokenDto tokenDto) {
         HttpHeaders headers = new HttpHeaders();
         ResponseCookie cookie = ResponseCookie.from("RefreshToken", tokenDto.getRefreshToken())
                 .path("/")
@@ -167,33 +156,7 @@ public class OauthService {
         return headers;
     }
 
-    // 회원가입 요청 처리 메소드
-    public ResponseEntity<SignupResponseDto> kakaoSignup(@RequestBody SignupRequestDto requestDto) throws BaseException {
-        // 카카오 서버로부터 받아온 회원정보 DB 에 저장
-        User newUser = User.builder()
-                .email(requestDto.getUser().getEmail())
-                .password("change your password!")
-                .socialLoginType(KAKAO)
-                .role(ROLE_USER)
-                .activated(true)
-                .build();
-        userRepository.save(newUser);
-
-        // 회원가입 상황에 따라 토큰 발급 후 헤더와 쿠키에 배치
-        TokenDto tokenDto = authService.authenticate(newUser.getEmail());
-        saveRefreshToken(newUser, tokenDto);
-
-        HttpHeaders headers = setTokenHeaders(tokenDto);
-
-        // 응답 작성
-        SignupResponseDto responseDto = new SignupResponseDto();
-        responseDto.setUser(userRepository.findByEmail(requestDto.getUser().getEmail())
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.DATABASE_ERROR)));
-        responseDto.setResult("회원가입이 완료되었습니다.");
-        return ResponseEntity.ok().headers(headers).body(responseDto);
-    }
-
-    private void saveRefreshToken(User user, TokenDto tokenDto) {
+    public void saveRefreshToken(User user, TokenDto tokenDto) {
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(user.getUserId())
                 .value(tokenDto.getRefreshToken())

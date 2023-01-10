@@ -7,8 +7,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.backend.oauthlogin.entity.Role.ROLE_USER;
 
@@ -20,7 +18,7 @@ public class UserDto {
 
     @NotNull
     @Size(min = 3, max = 50)
-    private String username;
+    private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
@@ -37,7 +35,7 @@ public class UserDto {
         if (user == null) return null;
 
         return UserDto.builder()
-                .username(user.getUsername())
+                .email(user.getEmail())
                 .nickname(user.getNickname())
                 .role(ROLE_USER)
                 .build();

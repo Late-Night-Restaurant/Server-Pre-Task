@@ -5,34 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45beecc4-1774-4f38-9384-d7cd2450a04f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/AuthorityDto$AuthorityDtoBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/AuthorityDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Account$AccountBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Account$AccountBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Account.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Account.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Authority$AuthorityBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Authority.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/resources/import.sql" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/import.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/AuthorityDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/oauth/LoginResponseDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/oauth/RefreshResponseDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/oauth/SignupRequestDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/oauth/SignupResponseDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Account$AccountBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Account.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/controller/OauthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/controller/OauthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/UserDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/LoginResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/LoginResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/RefreshResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/RefreshResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/SignupRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/SignupRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/SignupResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/dto/oauth/SignupResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Account.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Authority.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/CustomUserDetails.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Role.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/jwt/TokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/jwt/TokenProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/repository/AccountRepository.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/AuthService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/CustomUserDetailsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/OauthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/OauthService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/import.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/import.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +60,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "node.js.selected.package.tslint": "(autodetect)"
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "indent.rainbow.settings.IrConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">

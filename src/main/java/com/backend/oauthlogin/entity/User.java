@@ -60,7 +60,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(() -> {
-            return String.valueOf(getRole());
+            return String.valueOf(this.getRole());
         });
         return authorities;
     }
@@ -72,7 +72,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getEmail();
+        return this.getEmail();
     }
 
     /**
