@@ -27,7 +27,7 @@ spring:
 
 logging:
   level:
-    jjun.server: DEBUG   # 로깅 레벨 설정
+    com.com.backend: DEBUG   # 로깅 레벨 설정
 
 jwt:
   header: Authorization

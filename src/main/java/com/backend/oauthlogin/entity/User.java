@@ -28,12 +28,12 @@ public class User extends BaseTimeEntity implements UserDetails {
     private Long userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private SocialLoginType socialLoginType;
+    @Column(name = "login_type", nullable = false)
+    private LoginType loginType;
 
     @Column(name = "email", length = 50, unique = true, nullable = false)
     private String email;

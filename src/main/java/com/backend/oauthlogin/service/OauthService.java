@@ -23,14 +23,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
+import static com.backend.oauthlogin.entity.LoginType.KAKAO;
 import static com.backend.oauthlogin.entity.Role.ROLE_USER;
-import static com.backend.oauthlogin.entity.SocialLoginType.KAKAO;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class OauthService {
-    private final UserRepository userRepository;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepository userRepository;
@@ -120,7 +119,7 @@ public class OauthService {
         return User.builder()
                 .email(email)
                 .password("change your password!")
-                .socialLoginType(KAKAO)
+                .loginType(KAKAO)
                 .role(ROLE_USER)
                 .activated(true)
                 .build();
@@ -131,7 +130,7 @@ public class OauthService {
         User newUser = User.builder()
                 .email(requestDto.getUser().getEmail())
                 .password("change your password!")
-                .socialLoginType(KAKAO)
+                .loginType(KAKAO)
                 .role(ROLE_USER)
                 .activated(true)
                 .build();
