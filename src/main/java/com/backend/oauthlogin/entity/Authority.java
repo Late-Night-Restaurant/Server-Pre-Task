@@ -17,6 +17,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Authority {
 
+    // TODO 삭제할 엔티티
     @Id
     @Column(name = "authority_name", length = 50)
     private String authorityName;

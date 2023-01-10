@@ -5,7 +5,47 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45beecc4-1774-4f38-9384-d7cd2450a04f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Profile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/backend/oauthlogin/entity/UserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/OauthloginApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/config/BaseException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/config/BaseResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/config/BaseResponseStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/config/CorsConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/config/JpaConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/config/SecurityConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/controller/AuthController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/controller/OauthController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/controller/TestController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/UserDto$UserDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/dto/UserDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Authority.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/Authority.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/CustomUserDetails$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/CustomUserDetails.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/RefreshToken$RefreshTokenBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/RefreshToken.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/SocialLoginType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/User$UserBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/entity/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/jwt/AuthTokenProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/jwt/JwtAccessDeniedHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/jwt/JwtAuthenticationEntryPoint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/jwt/JwtFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/jwt/JwtSecurityConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/jwt/TokenProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/repository/AccountRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/repository/RefreshTokenRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/repository/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/service/AuthService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/service/CustomUserDetailsService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/service/OauthService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/backend/oauthlogin/util/SecurityUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Authority.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Authority.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/backend/oauthlogin/entity/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +72,7 @@
       <list>
         <option value="Enum" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -63,6 +104,9 @@
       </RecentBranches>
     </option>
   </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -75,26 +119,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/jun/Desktop/Developer/Spring/backend-pre-task/src/main/resources&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;545047c8afc84bc3f5ad14bcc1173532&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "last_opened_file_path": "/Users/jun/Desktop/Developer/Spring/backend-pre-task/src/main/resources",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "spring.configuration.checksum": "545047c8afc84bc3f5ad14bcc1173532",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources" />
@@ -104,10 +153,11 @@
       <recent name="" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.backend.oauthlogin.entity" />
       <recent name="com.backend.oauthlogin.service" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.OauthloginApplication">
+  <component name="RunManager" selected="JUnit.OauthServiceTest">
     <configuration name="backend-pre-task [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -129,6 +179,21 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="OauthServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="oauthlogin.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.backend.oauthlogin.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.backend.oauthlogin.service" />
+      <option name="MAIN_CLASS_NAME" value="com.backend.oauthlogin.service.OauthServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="OauthloginApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="oauthlogin.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.backend.oauthlogin.OauthloginApplication" />
@@ -138,6 +203,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.OauthServiceTest" />
         <item itemvalue="Gradle.backend-pre-task [dependencies]" />
       </list>
     </recent_temporary>
@@ -157,6 +223,9 @@
       <workItem from="1673098455407" duration="1906000" />
       <workItem from="1673187364568" duration="2279000" />
       <workItem from="1673195102588" duration="3922000" />
+      <workItem from="1673350388600" duration="3338000" />
+      <workItem from="1673359694661" duration="243000" />
+      <workItem from="1673360653923" duration="621000" />
     </task>
     <task id="LOCAL-00001" summary="[refactor] : user Entity 수정">
       <created>1673199240683</created>
