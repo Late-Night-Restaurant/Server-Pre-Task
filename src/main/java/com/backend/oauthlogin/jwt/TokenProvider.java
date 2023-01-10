@@ -1,7 +1,6 @@
 package com.backend.oauthlogin.jwt;
 
 import com.backend.oauthlogin.dto.TokenDto;
-import com.backend.oauthlogin.entity.Authority;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -20,6 +19,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
+
+import static com.backend.oauthlogin.entity.Role.ROLE_USER;
 
 /**
  * JWT 토큰에 관련된 암호화, 복호화, 검증 로직이 이루어지는 클래스
@@ -82,9 +83,6 @@ public class TokenProvider {
     }
 
     public TokenDto createToken(String email) {
-        String authorities = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build().toString();
 
         long now = (new Date()).getTime();   // 토큰의 만료 시간 설정
         Date accessTokenExpireTime = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
@@ -92,7 +90,7 @@ public class TokenProvider {
         // JWT Access Token 생성 -> 유저와 권한 정보를 담는다.
         String accessToken = Jwts.builder()
                 .setSubject(email)    // payload "sub" : "name"
-                .claim(AUTHORITIES_KEY, authorities)     // payload "auth" : "ROLE_USER"
+                .claim(AUTHORITIES_KEY, ROLE_USER)     // payload "auth" : "ROLE_USER"
                 .signWith(key, SignatureAlgorithm.HS512) // header "alg" : HS512 (해싱 알고리즘)
                 .setExpiration(accessTokenExpireTime)    // payload "exp" (10자리)
                 .compact();

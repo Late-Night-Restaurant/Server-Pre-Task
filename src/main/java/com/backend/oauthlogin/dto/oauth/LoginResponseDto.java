@@ -1,12 +1,12 @@
 package com.backend.oauthlogin.dto.oauth;
 
-import com.backend.oauthlogin.entity.Account;
+import com.backend.oauthlogin.entity.User;
 import lombok.Data;
 
 @Data
 public class LoginResponseDto {
 
     public boolean loginSuccess;
-    public Account account;
+    public User user;
     public String kakaoAccessToken;
 }

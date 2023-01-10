@@ -35,8 +35,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false)
     private SocialLoginType socialLoginType;
 
-    @Column(name = "username", length = 50, unique = true, nullable = false)
-    private String username;
+    @Column(name = "email", length = 50, unique = true, nullable = false)
+    private String email;
 
     @Column(name = "password", length = 100, nullable = false)
     private String password;
@@ -49,15 +49,8 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     // 연관관계 메서드
     @Builder.Default
-    @OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Profile> profileList = new ArrayList<>();
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_authority",
-//            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-//    private Set<Authority> authorities;
 
 
 
@@ -67,9 +60,19 @@ public class User extends BaseTimeEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(() -> {
-            return getRole().value();
+            return String.valueOf(getRole());
         });
         return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
     }
 
     /**
@@ -116,5 +119,3 @@ public class User extends BaseTimeEntity implements UserDetails {
         return true;
     }
 }
-
-// Profile -> 연관관계 매핑 고려해서 클래스 생성할 예정!

@@ -1,6 +1,6 @@
 package com.backend.oauthlogin.dto.oauth;
 
-import com.backend.oauthlogin.entity.Account;
+import com.backend.oauthlogin.entity.User;
 import lombok.Data;
 
 /**
@@ -11,5 +11,5 @@ public class SignupRequestDto {
 
     public String nickname;
     public String picture;
-    public Account account;
+    public User user;
 }

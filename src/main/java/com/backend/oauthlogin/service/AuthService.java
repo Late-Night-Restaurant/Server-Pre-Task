@@ -5,11 +5,11 @@ import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.TokenRequestDto;
 import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
-import com.backend.oauthlogin.entity.Account;
 import com.backend.oauthlogin.entity.RefreshToken;
+import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.jwt.TokenProvider;
-import com.backend.oauthlogin.repository.AccountRepository;
 import com.backend.oauthlogin.repository.RefreshTokenRepository;
+import com.backend.oauthlogin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -37,11 +37,11 @@ public class AuthService {
      * Request Header 에 Authorization 항목으로 토큰이 오면, 인증된 사용자에 대해 정보를 가져와 Account 타입으로 반환
      */
     @Transactional
-    public Account getAccountInfo(HttpServletRequest request) {
+    public User getAccountInfo(HttpServletRequest request) {
         String authenticAccount = (String) request.getAttribute("authenticAccount");
-        Account account = accountRepository.findByEmail(authenticAccount).orElseThrow();
-        System.out.println("AccountService 실행: " + account);
-        return account;
+        User user = userRepository.findByEmail(authenticAccount).orElseThrow();
+        System.out.println("AccountService 실행: " + user);
+        return user;
     }
 
     /**
@@ -72,16 +72,16 @@ public class AuthService {
 
     @Transactional
     public TokenDto authenticate(String email) {
-        Account account = accountRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow();
-        log.info("AuthService-login: 계정을 찾았습니다 {}", account);
+        log.info("AuthService-login: 계정을 찾았습니다 {}", user);
 
         // 토큰 발행
         TokenDto tokenDto = tokenProvider.createToken(email);
 
         // RefreshToken DB 에 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(account.getAccountId())
+                .key(user.getUserId())
                 .value(tokenDto.getRefreshToken())
                 .build();
 
@@ -128,7 +128,7 @@ public class AuthService {
      * 회원가입 요청에 대해 Access Token 과 Refresh Token 을 방급하고, Refresh Token 을 리포지토리에 저장하는 메소드
      */
     public TokenDto oauthSignup(SignupRequestDto requestDto) {
-        Account account = requestDto.getAccount();
+        User user = requestDto.getUser();
         return tokenProvider.createToken(account.getEmail());
     }
 

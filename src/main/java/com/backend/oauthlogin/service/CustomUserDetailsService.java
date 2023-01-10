@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +38,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!user.isActivated()) {
             throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
         }
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-                .collect(Collectors.toList());
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        SimpleGrantedAuthority role = new SimpleGrantedAuthority(user.getRole().value());
+        grantedAuthorities.add(role);
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }

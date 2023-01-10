@@ -1,5 +1,6 @@
 package com.backend.oauthlogin.dto;
 
+import com.backend.oauthlogin.entity.Role;
 import com.backend.oauthlogin.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -8,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.backend.oauthlogin.entity.Role.ROLE_USER;
 
 @Getter @Setter
 @Builder
@@ -28,7 +31,7 @@ public class UserDto {
     @Size(min = 3, max = 50)
     private String nickname;
 
-    private Set<AuthorityDto> authorityDtoSet;
+    private Role role;
 
     public static UserDto from(User user) {
         if (user == null) return null;
@@ -36,9 +39,7 @@ public class UserDto {
         return UserDto.builder()
                 .username(user.getUsername())
                 .nickname(user.getNickname())
-                .authorityDtoSet(user.getAuthorities().stream()
-                        .map(authority -> AuthorityDto.builder().authorityName(authority.getAuthorityName()).build())
-                        .collect(Collectors.toSet()))
+                .role(ROLE_USER)
                 .build();
 
     }
