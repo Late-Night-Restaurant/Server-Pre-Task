@@ -8,6 +8,7 @@ import com.backend.oauthlogin.jwt.TokenProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -78,7 +79,8 @@ public class SecurityConfig {
                 // token이 없는 상태에서 요청되는 로그인, 회원가입 API는 permitAll로 설정
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**", "/api/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

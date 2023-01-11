@@ -36,8 +36,9 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
 
+        System.out.println("AuthController jwt 토큰 발급 전");
         TokenDto jwt = authService.authenticate(loginDto);   // JWT Token 생성
-
+        System.out.println("AuthController jwt : " + jwt.getAccessToken());
 
         // Response Header 에 추가
         HttpHeaders httpHeaders = new HttpHeaders();
