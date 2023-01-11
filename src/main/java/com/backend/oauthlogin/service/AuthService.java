@@ -63,7 +63,7 @@ public class AuthService {
 
         // 4. Refresh Token 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())  // TODO authentication.getName() 이 Long Type 을 반환하는가?
+                .key(authentication.getName())
                 .value(tokenDto.getRefreshToken())
                 .build();
         System.out.println("Refresh Token : " + refreshToken.getValue());

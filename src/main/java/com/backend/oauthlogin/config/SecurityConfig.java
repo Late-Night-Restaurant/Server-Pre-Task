@@ -80,7 +80,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**").permitAll()
+                .antMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**", "/api/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

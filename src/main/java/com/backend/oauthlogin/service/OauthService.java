@@ -2,6 +2,7 @@ package com.backend.oauthlogin.service;
 
 import com.backend.oauthlogin.config.BaseException;
 import com.backend.oauthlogin.config.BaseResponseStatus;
+import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoAccountDto;
@@ -16,12 +17,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+
+import java.util.Date;
 
 import static com.backend.oauthlogin.entity.LoginType.KAKAO;
 import static com.backend.oauthlogin.entity.Role.ROLE_USER;
@@ -37,34 +41,41 @@ public class OauthService {
     private final AuthService authService;
 
     // 환경변수 가져오기
-    @Value("${kakao.key}")
+    @Value("${spring.jpa.security.oauth2.client.registration.kakao.client-id}")
     String KAKAO_CLIENT_ID;
 
-    @Value("${kakao.redirect_uri}")
+    @Value("${spring.jpa.security.oauth2.client.registration.kakao.redirect-uri}")
     String KAKAO_REDIRECT_URI;
 
+    @Value("${spring.jpa.security.oauth2.client.registration.kakao.client-secret}")
+    String KAKAO_CLIENT_SECRET;
 
     // 인가코드로 Kakao Access Token 을 요청하는 메소드
     public KakaoTokenDto getKakaoAccessToken(String code) {
 
+        // Access Token 발급 요청
         RestTemplate rt = new RestTemplate();  // 통신용 템플릿 for HTTP 통신 단순화 (스프링에서 지원하는 REST 서비스 호출방식)
-        HttpHeaders headers = new HttpHeaders();
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
         /* Kakao 공식 문서에 따라 헤더,바디 값 구성 */
+
+        HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", KAKAO_CLIENT_ID);
         params.add("redirect_uri", KAKAO_REDIRECT_URI);
         params.add("code", code);  // 인가 코드 요청 시 받은 인가 코드 값 from 프론트엔드
+//        params.add("client_secret", KAKAO_CLIENT_SECRET);   // 우선 생략
 
+        // Kakao 에 Access Token 요청
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);
         log.info("KakaoTokenRequest: {}", kakaoTokenRequest);
 
         // Kakao 로부터 Access Token 수신
         ResponseEntity<String> accessTokenResponse = rt.exchange(
-                "https://kauth.kakao.com/oauth/token",
+                "https://kauth.kakao.com/oauth/token",   // 토큰 발급 요청 주소에 POST 방식으로 HTTP Body 에 데이터를 담아서 전달
                 HttpMethod.POST,
                 kakaoTokenRequest,
                 String.class
@@ -83,7 +94,7 @@ public class OauthService {
     }
 
     // Kakao Access Token 으로 카카오 서버에 정보 요청하는 메소드
-    public User getKakaoInfo(String kakaoAccessToken) {
+    public KakaoAccountDto getKakaoInfo(String kakaoAccessToken) {
 
         RestTemplate rt = new RestTemplate();
 
@@ -91,13 +102,13 @@ public class OauthService {
         headers.add("Authorization", "Bearer " + kakaoAccessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        HttpEntity<MultiValueMap<String, String>> accountInfoRequest = new HttpEntity<>(headers);
+        HttpEntity<MultiValueMap<String, String>> kakaoInfoRequest = new HttpEntity<>(headers);
 
         // POST 방식으로 API 서버에 요청을 보내고 Response 를 받아온다.
-        ResponseEntity<String> accountInfoResponse = rt.exchange(
+        ResponseEntity<String> kakaoInfoResponse = rt.exchange(
                 "https://kapi.kakao.com/v2/user/me",
                 HttpMethod.POST,
-                accountInfoRequest,
+                kakaoInfoRequest,
                 String.class
         );
 
@@ -107,36 +118,36 @@ public class OauthService {
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoAccountDto kakaoAccountDto = null;
         try {
-            kakaoAccountDto = objectMapper.readValue(accountInfoResponse.getBody(), KakaoAccountDto.class);
+            kakaoAccountDto = objectMapper.readValue(kakaoInfoResponse.getBody(), KakaoAccountDto.class);
         } catch (JsonProcessingException e) {
             log.debug("KakaoInfo(KakaoAccountDto) JSON Parsing 에 실패했습니다.");
         }
 
-        // KakaoAccountDto 에서 필요한 정보를 꺼내서 Account 객체로 매핑
-        String email = kakaoAccountDto.getKakaoAccount().getEmail();
-        String kakaoName = kakaoAccountDto.getKakaoAccount().getProfile().getNickname();
-
-        return User.builder()
-                .email(email)
-                .pw("change your password!")
-                .loginType(KAKAO)
-                .role(ROLE_USER)
-                .activated(true)
-                .build();
+        return kakaoAccountDto;
     }
 
-    public User saveKakaoUser(SignupRequestDto requestDto) {
+    public TokenDto saveKakaoUser(String token) {
 
-        User newUser = User.builder()
-                .email(requestDto.getUser().getEmail())
-                .pw("change your password!")
-                .loginType(KAKAO)
-                .role(ROLE_USER)
-                .activated(true)
+        KakaoAccountDto kakaoAccount = getKakaoInfo(token);
+
+        User user = userRepository.findByEmail(kakaoAccount.getKakaoAccount().getEmail()).orElseThrow();
+        if (user == null) {
+            user = User.builder()
+                    .email(kakaoAccount.getKakaoAccount().getEmail())
+                    .pw("change your password!")
+                    .nickname(kakaoAccount.getKakaoAccount().getProfile().getNickname())
+                    .loginType(KAKAO)
+                    .role(ROLE_USER)
+                    .activated(true)
+                    .build();
+            userRepository.save(user);
+        }
+
+        LoginDto loginDto = LoginDto.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
                 .build();
-        userRepository.save(newUser);
-
-        return newUser;
+        return authService.authenticate(loginDto);
     }
 
     public HttpHeaders setTokenHeaders(TokenDto tokenDto) {
@@ -165,5 +176,19 @@ public class OauthService {
         log.info("토큰 저장이 완료되었습니다 : 계정 아이디 - {}, refresh token - {}", user.getUserId(), tokenDto.getRefreshToken());
     }
 
+    //== 채니님 코드 ==//
+//    public String createToken(User user) {
+//
+//        String jwtToken = JWT.create()
+//                .withSubject(user.getEmail())
+//                .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
+//
+//                .withClaim("id", user.getId())
+//                .withClaim("email", user.getEmail())
+//
+//                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+//        System.out.println("createToken 메소드 : 자체 토큰 발급 완료");
+//        return jwtToken;
+//    }
 
 }
