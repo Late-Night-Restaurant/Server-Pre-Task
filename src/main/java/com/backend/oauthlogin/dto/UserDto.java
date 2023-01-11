@@ -9,7 +9,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static com.backend.oauthlogin.entity.Role.ROLE_USER;
 
 @Getter @Setter
 @Builder
@@ -25,16 +24,13 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     @Size(min = 3, max = 100)
-    private String pw;
-
-    private Role role;
+    private String password;
 
     public static UserDto from(User user) {
         if (user == null) return null;
 
         return UserDto.builder()
                 .email(user.getEmail())
-                .role(ROLE_USER)
                 .build();
     }
 

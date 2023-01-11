@@ -9,7 +9,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "PROFILE")
-@Getter @Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

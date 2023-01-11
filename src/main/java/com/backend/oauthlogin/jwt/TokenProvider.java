@@ -36,7 +36,6 @@ public class TokenProvider {
     private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24;   // Access Token 만료 기한: 1일
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // Refresh Token 만료 기한: 7일
-//    private final long tokenValidityInMilliseconds;
     private Key key;
 
     public TokenProvider(
@@ -44,46 +43,7 @@ public class TokenProvider {
         // JWT 토큰 생성 시 사용될 암호화 키 값 생성자에서 지정
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-//        this.tokenValidityInMilliseconds = tokenValidityInMilliseconds * 1000;   // 만료기간 하루로 설정
     }
-
-    // bean 생성 이후 주입을 받은 후, secret 값을 Base64로 decode 한 후에 key 변수에 넣어주는 작업
-//    @Override
-//    public void afterPropertiesSet() {
-//        byte[] keyBytes = Decoders.BASE64.decode(secret);
-//        this.key = Keys.hmacShaKeyFor(keyBytes);
-//    }
-
-//    // Authentication 객체의 권한 정보를 이용해서 토큰을 생성하는 createToken 메소드
-//    public TokenDto createToken(Authentication authentication) {
-//        String authorities = authentication.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.joining(","));
-//
-//        long now = (new Date()).getTime();   // 토큰의 만료 시간 설정
-//        Date accessTokenExpireTime = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-//
-//        // JWT Access Token 생성 -> 유저와 권한 정보를 담는다.
-//        String accessToken = Jwts.builder()
-//                .setSubject(authentication.getName())    // payload "sub" : "name"
-//                .claim(AUTHORITIES_KEY, authorities)     // payload "auth" : "ROLE_USER"
-//                .signWith(key, SignatureAlgorithm.HS512) // header "alg" : HS512 (해싱 알고리즘)
-//                .setExpiration(accessTokenExpireTime)    // payload "exp" (10자리)
-//                .compact();
-//
-//        // JWT Refresh Token 생성 -> 만료일자 외에 아무 정보도 담지 않는다.
-//        String refreshToken = Jwts.builder()
-//                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-//                .signWith(key, SignatureAlgorithm.HS512)
-//                .compact();
-//
-//        return TokenDto.builder()
-//                .grantType(BEARER_TYPE)
-//                .accessToken(accessToken)
-//                .accessTokenExpiresIn(accessTokenExpireTime.getTime())
-//                .refreshToken(refreshToken)
-//                .build();
-//    }
 
     public TokenDto createToken(String email) {
 
@@ -91,9 +51,7 @@ public class TokenProvider {
         Date accessTokenExpireTime = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         Date refreshTokenExpireTime = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
 
-        // JWT Access Token 생성 -> 유저와 권한 정보를 담는다.
         String accessToken = publishAccessToken(email, accessTokenExpireTime);
-        // JWT Refresh Token 생성 -> 만료일자 외에 아무 정보도 담지 않는다.
         String refreshToken = publishRefreshToken(refreshTokenExpireTime);
 
         return TokenDto.builder()

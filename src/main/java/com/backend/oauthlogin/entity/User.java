@@ -18,7 +18,6 @@ import static javax.persistence.CascadeType.ALL;
 @Entity    // @Entity 어노테이션: 자동으로 JPA 연동
 @Table(name = "`user`")
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
