@@ -119,3 +119,4 @@ public class OauthController {
         return ResponseEntity.ok().headers(headers).body(jwtTokenDto);
     }
 }
+// Response 커스텀해서 반환형식 일치시킴

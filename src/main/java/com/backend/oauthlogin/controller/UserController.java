@@ -61,3 +61,4 @@ public class UserController {
         return Response.success(userService.getUserWithAuthorities(username).get());
     }
 }
+//Response 타입 커스텀

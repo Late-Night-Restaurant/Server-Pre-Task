@@ -11,3 +11,4 @@ import lombok.Getter;
 public class Success<T> implements Result {
     private T data; // T는 어떤 타입이 와도 상관없음을 의미
 }
+// 반환 데이터

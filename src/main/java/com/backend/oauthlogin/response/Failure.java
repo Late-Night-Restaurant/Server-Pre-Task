@@ -8,3 +8,4 @@ import lombok.Getter;
 public class Failure implements Result{
     private String msg;
 }
+//오류 반환 메세지 출력

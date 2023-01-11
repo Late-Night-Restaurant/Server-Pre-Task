@@ -54,3 +54,4 @@ public class AuthController {
         return Response.success(authService.reissue(tokenRequestDto));
     }
 }
+// Response 타입 커스텀

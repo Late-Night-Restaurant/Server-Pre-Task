@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)// Null 버림
+@JsonInclude(JsonInclude.Include.NON_NULL)// Null값 버림
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 
