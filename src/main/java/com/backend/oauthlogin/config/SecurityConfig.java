@@ -64,10 +64,10 @@ public class SecurityConfig {
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
                 // enable h2-console
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
+//                .and()
+//                .headers()
+//                .frameOptions()
+//                .sameOrigin()
 
                 // 세션을 사용하지 않으므로 STATELESS 설정 (Security는 기본적으노 세션 방식을 사용)
                 .and()
@@ -78,7 +78,7 @@ public class SecurityConfig {
                 // token이 없는 상태에서 요청되는 로그인, 회원가입 API는 permitAll로 설정
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/", "/h2/**", "/api/hello", "/api/authenticate", "/api/signup", "/auth/**").permitAll()
+                .antMatchers("/api/login","/api/signup","/api/hello").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
@@ -90,7 +90,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers("/h2-console/**", "/favicon.ico", "/error");
+                .antMatchers( "/favicon.ico", "/error");
     }
 
 }
