@@ -1,0 +1,54 @@
+spring:
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/oauthlogin?serverTimezone=Asia/Seoul
+    username: root
+    password: "004637"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    defer-datasource-initialization: true
+
+
+    security:
+      oauth2:
+        client:
+          registration:
+            kakao:
+              client-id: 4ab7b193bdd041a30446ede285a1f77a
+              client-secret: cjW924pToyagFaxJhQy5Ad3KKFpeEtrU
+              redirect-uri: http://localhost:8080/api/authorization_code
+              authorization-grant-type: authorization_code
+              client-authentication-method: GET
+              client-name: kakao
+              scope:
+                - profile_nickname
+                - profile_image
+                - account_email
+          provider:
+            kakao:
+              authorization-uri: https://kauth.kakao.com/oauth/authorize
+              token-uri: https://kauth.kakao.com/oauth/token
+              user-info-uri: https://kapi.kakao.com/v2/user/me
+              user-name-attribute: id
+
+logging:
+  level:
+    com.com.backend: DEBUG   # 로깅 레벨 설정
+
+jwt:
+  header: Authorization
+  #HS512 알고리즘을 사용 => 512bit(64byte) 이상의 secret key를 사용해야 한다.
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+#  token-validity-in-seconds: 86400
+
+#kakao:
+#  key: 7adc3bca928d264e605607d6a64f2d98
+#  redirect_uri: http://localhost:8080/oauth/login/kakao
