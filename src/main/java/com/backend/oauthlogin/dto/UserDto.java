@@ -25,10 +25,6 @@ public class UserDto {
     @Size(min = 3, max = 100)
     private String pw;
 
-    @NotNull
-    @Size(min = 3, max = 50)
-    private String nickname;
-
     private Role role;
 
     public static UserDto from(User user) {
@@ -36,10 +32,8 @@ public class UserDto {
 
         return UserDto.builder()
                 .email(user.getEmail())
-                .nickname(user.getNickname())
                 .role(ROLE_USER)
                 .build();
-
     }
 
 }
