@@ -5,6 +5,7 @@ import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.TokenRequestDto;
 import com.backend.oauthlogin.jwt.JwtFilter;
+import com.backend.oauthlogin.response.Response;
 import com.backend.oauthlogin.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -49,7 +50,7 @@ public class AuthController {
      * - Access Token, Refresh Token String 을 담고 있는 TokenRequestDto 를 파라미터로 넘겨줌
      */
     @PostMapping("/reissue")
-    public BaseResponse<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        return new BaseResponse<>(authService.reissue(tokenRequestDto));
+    public Response reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return Response.success(authService.reissue(tokenRequestDto));
     }
 }

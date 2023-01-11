@@ -5,6 +5,7 @@ import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.UserDto;
 import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.response.Response;
 import com.backend.oauthlogin.service.AuthService;
 import com.backend.oauthlogin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class UserController {
      * - UserDto를 파라미터로 받아 UserService의 signup 메소드 호출
      */
     @PostMapping("/signup")
-    public BaseResponse<User> signup(@Valid @RequestBody UserDto userDto) {
-        return new BaseResponse<>(userService.signup(userDto));
+    public Response signup(@Valid @RequestBody UserDto userDto) {
+        return Response.success(userService.signup(userDto));
     }
 
     @GetMapping("/login")
@@ -50,13 +51,13 @@ public class UserController {
 
     @GetMapping("/user")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")  // USER, ADMIN 권한 모두 허용
-    public BaseResponse<User> getMyUserInfo() {
-        return new BaseResponse<>(userService.getMyUserWithAuthorities().get());
+    public Response getMyUserInfo() {
+        return Response.success(userService.getMyUserWithAuthorities().get());
     }
 
     @GetMapping("/user/{username}")
     @PreAuthorize("hasAnyRole('ADMIN')")   // ADMIN 권한만 허용 -> API를 호출 가능한 권한을 제한함
-    public BaseResponse<User> getUserInfo(@PathVariable String username) {
-        return new BaseResponse<>(userService.getUserWithAuthorities(username).get());
+    public Response getUserInfo(@PathVariable String username) {
+        return Response.success(userService.getUserWithAuthorities(username).get());
     }
 }
