@@ -1,11 +1,14 @@
 package com.backend.oauthlogin.jwt;
 
 import com.backend.oauthlogin.dto.TokenDto;
+import com.backend.oauthlogin.entity.RefreshToken;
+import com.backend.oauthlogin.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,10 +38,13 @@ public class TokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // Refresh Token 만료 기한: 7일
 //    private final long tokenValidityInMilliseconds;
     private Key key;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenProvider(
-            @Value("${jwt.secret}") String secretKey) {
-           // JWT 토큰 생성 시 사용될 암호화 키 값 생성자에서 지정
+            @Value("${jwt.secret}") String secretKey,
+            RefreshTokenRepository refreshTokenRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        // JWT 토큰 생성 시 사용될 암호화 키 값 생성자에서 지정
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
 //        this.tokenValidityInMilliseconds = tokenValidityInMilliseconds * 1000;   // 만료기간 하루로 설정
@@ -100,6 +106,13 @@ public class TokenProvider {
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+
+        // DB에 저장할 Refresh Token 객체 Build
+        RefreshToken refreshTokenDto = RefreshToken.builder()
+                .key(email)
+                .value(refreshToken)
+                .build();
+        refreshTokenRepository.save(refreshTokenDto);
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)

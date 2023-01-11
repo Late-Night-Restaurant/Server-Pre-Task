@@ -9,6 +9,7 @@ import com.backend.oauthlogin.dto.oauth.kakao.KakaoAccountDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoTokenDto;
 import com.backend.oauthlogin.entity.RefreshToken;
 import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.jwt.TokenProvider;
 import com.backend.oauthlogin.repository.RefreshTokenRepository;
 import com.backend.oauthlogin.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,6 +30,7 @@ import java.util.Date;
 
 import static com.backend.oauthlogin.entity.LoginType.KAKAO;
 import static com.backend.oauthlogin.entity.Role.ROLE_USER;
+import static org.springframework.security.config.Elements.JWT;
 
 @Service
 @Slf4j
@@ -39,6 +41,7 @@ public class OauthService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository tokenRepository;
     private final AuthService authService;
+    private final TokenProvider tokenProvider;
 
     // 환경변수 가져오기
     @Value("${spring.jpa.security.oauth2.client.registration.kakao.client-id}")
@@ -112,15 +115,19 @@ public class OauthService {
                 String.class
         );
 
-        log.info("카카오 서버에서 정상적으로 데이터를 수신했습니다.");
+        log.info("카카오 서버에서 정상적으로 데이터를 수신했습니다. {}", kakaoInfoResponse.getBody());
 
         // Json Parsing (KakaoAccountDto)
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoAccountDto kakaoAccountDto = null;
         try {
+            log.info("kakaoInfoResponse.getBody() : {}", kakaoInfoResponse.getBody());
             kakaoAccountDto = objectMapper.readValue(kakaoInfoResponse.getBody(), KakaoAccountDto.class);
+            log.info("KakaoInfo(KakaoAccountDto) JSON Parsing 에 성공했습니다.");
         } catch (JsonProcessingException e) {
             log.debug("KakaoInfo(KakaoAccountDto) JSON Parsing 에 실패했습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return kakaoAccountDto;
@@ -129,25 +136,29 @@ public class OauthService {
     public TokenDto saveKakaoUser(String token) {
 
         KakaoAccountDto kakaoAccount = getKakaoInfo(token);
+        log.info("OauthService - saveKakaoUser() kakaoInfo 받아오기 성공 : {}", kakaoAccount);
 
-        User user = userRepository.findByEmail(kakaoAccount.getKakaoAccount().getEmail()).orElseThrow();
+        User user = null;
+//        User user = userRepository.findByEmail(kakaoAccount.getKakao_account().getEmail()).orElseThrow(null);
+        log.info("userRepository 에 중복된 이메일이 없으므로 자체 유저 객체로 생성");
         if (user == null) {
             user = User.builder()
-                    .email(kakaoAccount.getKakaoAccount().getEmail())
+                    .email(kakaoAccount.getKakao_account().getEmail())
                     .pw("change your password!")
-                    .nickname(kakaoAccount.getKakaoAccount().getProfile().getNickname())
+                    .nickname(kakaoAccount.getKakao_account().getProfile().getNickname())
                     .loginType(KAKAO)
                     .role(ROLE_USER)
                     .activated(true)
                     .build();
             userRepository.save(user);
         }
-
-        LoginDto loginDto = LoginDto.builder()
+        log.info("UserRepository에 카카오 유저저장(JWT 토큰 발급 이전) : {}", user);
+        /*LoginDto loginDto = LoginDto.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .build();
-        return authService.authenticate(loginDto);
+        return authService.authenticate(loginDto);*/
+        return tokenProvider.createToken(user.getEmail());
     }
 
     public HttpHeaders setTokenHeaders(TokenDto tokenDto) {
@@ -177,18 +188,18 @@ public class OauthService {
     }
 
     //== 채니님 코드 ==//
-//    public String createToken(User user) {
-//
-//        String jwtToken = JWT.create()
-//                .withSubject(user.getEmail())
-//                .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
-//
-//                .withClaim("id", user.getId())
-//                .withClaim("email", user.getEmail())
-//
-//                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-//        System.out.println("createToken 메소드 : 자체 토큰 발급 완료");
-//        return jwtToken;
-//    }
+    /*public String createToken(User user) {
 
+        String jwtToken = JWT.create()
+                .withSubject(user.getEmail())
+                .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
+
+                .withClaim("id", user.getId())
+                .withClaim("email", user.getEmail())
+
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+        System.out.println("createToken 메소드 : 자체 토큰 발급 완료");
+        return jwtToken;
+    }
+*/
 }
