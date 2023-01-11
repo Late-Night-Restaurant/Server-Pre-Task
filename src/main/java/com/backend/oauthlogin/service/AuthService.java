@@ -1,20 +1,23 @@
 package com.backend.oauthlogin.service;
 
 
-import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.TokenRequestDto;
-import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
-import com.backend.oauthlogin.entity.Account;
+import com.backend.oauthlogin.dto.UserDto;
 import com.backend.oauthlogin.entity.RefreshToken;
+import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.jwt.JwtFilter;
 import com.backend.oauthlogin.jwt.TokenProvider;
-import com.backend.oauthlogin.repository.AccountRepository;
 import com.backend.oauthlogin.repository.RefreshTokenRepository;
+import com.backend.oauthlogin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -37,51 +40,42 @@ public class AuthService {
      * Request Header 에 Authorization 항목으로 토큰이 오면, 인증된 사용자에 대해 정보를 가져와 Account 타입으로 반환
      */
     @Transactional
-    public Account getAccountInfo(HttpServletRequest request) {
+    public User getUserInfo(HttpServletRequest request) {
         String authenticAccount = (String) request.getAttribute("authenticAccount");
-        Account account = accountRepository.findByEmail(authenticAccount).orElseThrow();
-        System.out.println("AccountService 실행: " + account);
-        return account;
+        User user = userRepository.findUserByEmail(authenticAccount).orElseThrow();
+        System.out.println("AccountService 실행: " + user);
+        return user;
     }
 
     /**
      * 로그인 시 Token 을 발급해서 리턴하는 메소드
      */
     @Transactional
-    public TokenDto authenticate(LoginDto loginDto) {
+    public TokenDto authenticate(UserDto userDto) {
         // 1. Login 을 시도한 ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-
+                new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword());
         // 2. 실제로 검증이 이루어지는 부분 (유저의 비밀번호 일치 여부 체크)
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);   // 이때 커스텀한 UserDetailsService 의 loadByUsername 메소드가 실행
+        authenticationManagerBuilder.getObject().authenticate(authenticationToken);// 이때 커스텀한 UserDetailsService 의 loadByUsername 메소드가 실행
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.createToken(authentication);
-
-        // 4. Refresh Token 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(Long.valueOf(authentication.getName()))
-                .value(tokenDto.getRefreshToken())
-                .build();
-
-        refreshTokenRepository.save(refreshToken);
-
-        return tokenDto;
+        return publishToken(userDto);
     }
+
 
     @Transactional
     public TokenDto authenticate(String email) {
-        Account account = accountRepository.findByEmail(email)
+
+        User user = userRepository.findUserByEmail(email)
                 .orElseThrow();
-        log.info("AuthService-login: 계정을 찾았습니다 {}", account);
+        log.info("AuthService-login: 계정을 찾았습니다 {}", user);
 
         // 토큰 발행
         TokenDto tokenDto = tokenProvider.createToken(email);
 
         // RefreshToken DB 에 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(account.getAccountId())
+                .key(user.getUserId())
                 .value(tokenDto.getRefreshToken())
                 .build();
 
@@ -89,8 +83,38 @@ public class AuthService {
         log.info("토큰 발급과 저장을 완료했습니다.");
 
         return tokenDto;
-
     }
+
+//    @Transactional
+//    public TokenDto authorize(UserDto userDto) {
+//
+//    }
+
+    @Transactional
+    public TokenDto publishToken(UserDto userDto) {
+
+        TokenDto tokenDto = tokenProvider.createToken(userDto.getEmail());
+
+        //
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(userRepository.findUserByEmail(userDto.getEmail()).orElseThrow(() ->
+                        new UsernameNotFoundException("리프레쉬 토큰을 발급할 수 없습니다")).getUserId())
+                .value(tokenDto.getRefreshToken())
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+
+        return tokenDto;
+    }
+
+
+    @Transactional
+    public void rememberUserByToken(TokenDto tokenDto) {
+        Authentication authentication = tokenProvider.getAuthentication(tokenDto.getAccessToken());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+
 
     /**
      * 토큰 만료 시 재발급하는 메소드
@@ -124,13 +148,23 @@ public class AuthService {
         return tokenDto;
     }
 
+    public HttpHeaders inputTokenInHeader(TokenDto tokenDto) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDto.getAccessToken());
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "refresh " + tokenDto.getRefreshToken());
+        return httpHeaders;
+    }
+
+
     /**
      * 회원가입 요청에 대해 Access Token 과 Refresh Token 을 방급하고, Refresh Token 을 리포지토리에 저장하는 메소드
      */
-    public TokenDto oauthSignup(SignupRequestDto requestDto) {
-        Account account = requestDto.getAccount();
-        return tokenProvider.createToken(account.getEmail());
-    }
+//    public TokenDto oauthSignup(SignupRequestDto requestDto) {
+//        Account account = requestDto.getAccount();
+//        return tokenProvider.createToken(account.getEmail());
+//    }
+
+
 
 
 }
