@@ -52,18 +52,21 @@ public class AuthService {
         // 1. Login 을 시도한 ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-
+        System.out.println("AuthService - UsernamePassordAuthenticationToken 객체 생성 " + authenticationToken);
         // 2. 실제로 검증이 이루어지는 부분 (유저의 비밀번호 일치 여부 체크)
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);   // 이때 커스텀한 UserDetailsService 의 loadByUsername 메소드가 실행
 
+        System.out.println("createToken() 실행 전");
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenDto tokenDto = tokenProvider.createToken(authentication);
+        System.out.println("token 발급 성공: " + tokenDto.getAccessToken() + " Refresh Token 발급 전");
 
         // 4. Refresh Token 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(Long.valueOf(authentication.getName()))  // TODO authentication.getName() 이 Long Type 을 반환하는가?
+                .key(authentication.getName())  // TODO authentication.getName() 이 Long Type 을 반환하는가?
                 .value(tokenDto.getRefreshToken())
                 .build();
+        System.out.println("Refresh Token : " + refreshToken.getValue());
 
         refreshTokenRepository.save(refreshToken);
 
@@ -71,7 +74,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto authenticate(String email) {
+    public TokenDto oauthenticate(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow();
         log.info("AuthService-login: 계정을 찾았습니다 {}", user);
@@ -81,7 +84,7 @@ public class AuthService {
 
         // RefreshToken DB 에 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(user.getUserId())
+                .key(user.getUsername())
                 .value(tokenDto.getRefreshToken())
                 .build();
 

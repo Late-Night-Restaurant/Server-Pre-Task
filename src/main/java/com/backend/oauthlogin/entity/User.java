@@ -38,8 +38,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "email", length = 50, unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", length = 100, nullable = false)
-    private String password;
+    @Column(name = "pw", length = 100, nullable = false)
+    private String pw;
 
     @Column(name = "nickname", length = 50)
     private String nickname;
@@ -60,14 +60,15 @@ public class User extends BaseTimeEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(() -> {
-            return String.valueOf(this.getRole());
+            return getRole().value();
         });
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+//        return null;
+        return getPw();
     }
 
     @Override

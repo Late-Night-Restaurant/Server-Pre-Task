@@ -118,7 +118,7 @@ public class OauthService {
 
         return User.builder()
                 .email(email)
-                .password("change your password!")
+                .pw("change your password!")
                 .loginType(KAKAO)
                 .role(ROLE_USER)
                 .activated(true)
@@ -129,7 +129,7 @@ public class OauthService {
 
         User newUser = User.builder()
                 .email(requestDto.getUser().getEmail())
-                .password("change your password!")
+                .pw("change your password!")
                 .loginType(KAKAO)
                 .role(ROLE_USER)
                 .activated(true)
@@ -157,7 +157,7 @@ public class OauthService {
 
     public void saveRefreshToken(User user, TokenDto tokenDto) {
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(user.getUserId())
+                .key(user.getUsername())
                 .value(tokenDto.getRefreshToken())
                 .build();
 

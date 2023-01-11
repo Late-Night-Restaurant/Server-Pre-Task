@@ -25,7 +25,7 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -34,13 +34,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public User signup(UserDto userDto) {
         // username을 기준으로 이미 DB에 존재하는 유저인지 검사
-        if (userRepository.findOneWithAuthoritiesByEmail(userDto.getEmail()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
-        }
+//        if (userRepository.findOneWithAuthoritiesByEmail(userDto.getEmail()).orElse(null) != null) {
+//            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+//        }
 
         User user = User.builder()
                 .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))
+                .pw(passwordEncoder.encode(userDto.getPw()))
                 .nickname(userDto.getNickname())
                 .loginType(LoginType.FORM)
                 .role(Role.ROLE_USER)
@@ -63,24 +63,4 @@ public class UserService implements UserDetailsService {
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByEmail);
     }
 
-    // 로그인 시 DB에서 유저정보와 권한정보를 가져오고, 이를 기반으로 userdetails User 객체를 생성
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(final String username) {
-        return userRepository.findOneWithAuthoritiesByEmail(username)
-                .map(user -> createUser(username, user))
-                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-    }
-
-    private org.springframework.security.core.userdetails.User createUser(String username, User user) {
-        if (!user.isActivated()) {
-            throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
-        }
-
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        SimpleGrantedAuthority role = new SimpleGrantedAuthority(String.valueOf(user.getRole()));
-        grantedAuthorities.add(role);
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
-    }
 }

@@ -44,7 +44,7 @@ public class OauthController {
         loginResponseDto.setUser(user);
 
         try {
-            TokenDto tokenDto = authService.authenticate(user.getEmail());
+            TokenDto tokenDto = authService.oauthenticate(user.getEmail());
             loginResponseDto.setLoginSuccess(true);
 
             HttpHeaders headers = oauthService.setTokenHeaders(tokenDto);
@@ -64,7 +64,7 @@ public class OauthController {
         User newUser = oauthService.saveKakaoUser(requestDto);
 
         // 회원가입 상황에 따라 토큰 발급 후 헤더와 쿠키에 배치
-        TokenDto tokenDto = authService.authenticate(newUser.getEmail());
+        TokenDto tokenDto = authService.oauthenticate(newUser.getEmail());
         oauthService.saveRefreshToken(newUser, tokenDto);
 
         HttpHeaders headers = oauthService.setTokenHeaders(tokenDto);
