@@ -40,3 +40,9 @@ out/
 .vscode/
 
 /.idea/
+
+
+### yml ###
+*.yml
+application.yml
+**/resources/application.yml
