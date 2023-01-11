@@ -33,18 +33,18 @@ public class AuthController {
      *  - 생성한 Authentication 객체는 SecurityContext 에 저장
      *  - Authentication 객체를 createToken() 메소드를 통해 JWT Token 발급
      */
-    @PostMapping("/authenticate")
-    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
-
-        TokenDto jwt = authService.authenticate(loginDto);   // JWT Token 생성
-
-
-        // Response Header 에 추가
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-        return new ResponseEntity<>(jwt, httpHeaders, HttpStatus.OK);   // ResponseBody 에도 실어서 응답을 반환
-    }
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
+//
+//        TokenDto jwt = authService.authenticate(loginDto);   // JWT Token 생성
+//
+//
+//        // Response Header 에 추가
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+//
+//        return new ResponseEntity<>(jwt, httpHeaders, HttpStatus.OK);   // ResponseBody 에도 실어서 응답을 반환
+//    }
 
     /**
      * 토큰 재발급 API
