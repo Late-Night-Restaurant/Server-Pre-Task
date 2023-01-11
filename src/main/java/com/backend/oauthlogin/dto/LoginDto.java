@@ -2,6 +2,7 @@ package com.backend.oauthlogin.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,8 +16,8 @@ import javax.validation.constraints.Size;
 public class LoginDto {
 
     @NotNull
-    @Size(min = 3, max = 50)
-    private String username;
+    @Email
+    private String email;
 
     @NotNull
     @Size(min = 3, max = 100)
