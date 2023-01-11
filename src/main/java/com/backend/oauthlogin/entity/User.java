@@ -6,14 +6,14 @@ import lombok.*;
 
 
 import javax.persistence.*;
-import java.util.Set;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity    // @Entity 어노테이션: 자동으로 JPA 연동
-@Table(name = "`USER`")
+@Table(name = "`USERS`")
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,35 +24,36 @@ public class User extends BaseTimeEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Email
+    @NotNull
+    private String email;
+
+    @Column(name = "password", length = 100)
+    @NotNull
+    private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    private SocialLoginType socialLoginType;
-
-    @Column(name = "username", length = 50, unique = true)
-    private String username;
-
-    @Column(name = "password", length = 100)
-    private String password;
-
-    @Column(name = "nickname", length = 50)
-    private String nickname;
+    private LoginType loginType;
 
     @Column(name = "activated")
     private boolean activated;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_authority",
-//            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-//    private Set<Authority> authorities;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> Authorities = new ArrayList<>();
+        Authorities.add(() -> {
+            return String.valueOf(getRole());
+        });
+        return Authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
     @Override
@@ -72,7 +73,6 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return this.activated;
     }
 }
-// Profile -> 연관관계 매핑 고려해서 클래스 생성할 예ㄷ !
