@@ -145,7 +145,6 @@ public class OauthService {
             user = User.builder()
                     .email(kakaoAccount.getKakao_account().getEmail())
                     .pw("change your password!")
-                    .nickname(kakaoAccount.getKakao_account().getProfile().getNickname())
                     .loginType(KAKAO)
                     .role(ROLE_USER)
                     .activated(true)

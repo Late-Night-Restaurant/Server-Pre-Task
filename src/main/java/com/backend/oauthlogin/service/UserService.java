@@ -41,7 +41,6 @@ public class UserService {
         User user = User.builder()
                 .email(userDto.getEmail())
                 .pw(passwordEncoder.encode(userDto.getPw()))
-                .nickname(userDto.getNickname())
                 .loginType(LoginType.FORM)
                 .role(Role.ROLE_USER)
                 .activated(true)

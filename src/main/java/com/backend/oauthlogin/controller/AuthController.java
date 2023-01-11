@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,15 +37,11 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
 
-        System.out.println("AuthController jwt 토큰 발급 전");
-        TokenDto jwt = authService.authenticate(loginDto);   // JWT Token 생성
-        System.out.println("AuthController jwt : " + jwt.getAccessToken());
+        Authentication authentication = authService.authenticateProto(loginDto); // 인증 (
+        TokenDto tokenDto = authService.authorizeProto(authentication.getName()); // 인가
+        HttpHeaders headers = authService.inputTokenInHeader(tokenDto); // 토큰 헤더에 넣기
 
-        // Response Header 에 추가
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-        return new ResponseEntity<>(jwt, httpHeaders, HttpStatus.OK);   // ResponseBody 에도 실어서 응답을 반환
+        return new ResponseEntity<>(tokenDto, headers, HttpStatus.OK);   // ResponseBody 에도 실어서 응답을 반환
     }
 
     /**
