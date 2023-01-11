@@ -1,16 +1,20 @@
 package com.backend.oauthlogin.service;
 
+import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.UserDto;
-import com.backend.oauthlogin.entity.Authority;
+import com.backend.oauthlogin.entity.LoginType;
+import com.backend.oauthlogin.entity.Role;
 import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.repository.UserRepository;
 import com.backend.oauthlogin.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -18,44 +22,79 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String email) {
+        User loadedUser = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다."));
+        if (!loadedUser.isActivated()) {
+            throw new RuntimeException(email + " -> 활성화되어 있지 않습니다.");
+        }
+        return loadedUser;
+    }
+
     // 회원가입 로직
     @Transactional
-    public User signup(UserDto userDto) {
-        // username을 기준으로 이미 DB에 존재하는 유저인지 검사
-        if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
-        }
-
-        Authority authority = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build();
-
+    public UserDto signup(UserDto userDto) {
         User user = User.builder()
-                .username(userDto.getUsername())
+                .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-                .nickname(userDto.getNickname())
-                .authorities(Collections.singleton(authority))
+                .loginType(LoginType.FORM)
+                .role(Role.ROLE_USER)
                 .activated(true)
                 .build();
 
-        return userRepository.save(user);   // 없으면 새로 유저 정보와 권한 정보 생성 후, DB에 저장
+        userRepository.save(user);
+
+        return UserDto.builder()
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
     }
+
+    @Transactional(readOnly = true)
+    public void checkDuplicatedUser(UserDto userDto) {
+        if (userRepository.findUserByEmail(userDto.getEmail()).orElse(null) != null) {
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto formLogin(UserDto userDto) {
+
+        return null;
+    }
+
 
     //== 유저, 권한정보를 가져오는 메소드 ==//
     // username을 기준으로 정보를 가져온다.
+
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(String username) {
-        return userRepository.findOneWithAuthoritiesByUsername(username);
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
     }
 
-    // SecurityContext에 저장된 username에 해당하는 유저, 권한의 정보만 가저온다.
-    @Transactional(readOnly = true)
-    public Optional<User> getMyUserWithAuthorities() {
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-    }
+//    @Transactional(readOnly = true)
+//    public Optional<User> getMyUserWithAuthorities() {
+//        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+//    }
+
+
+//    @Transactional(readOnly = true)
+//    public Optional<User> getUserWithAuthorities(String email) {
+//        return userRepository.findOneWithAuthoritiesByUsername(email);
+//    }
+//
+//    // SecurityContext에 저장된 username에 해당하는 유저, 권한의 정보만 가저온다.
+//    @Transactional(readOnly = true)
+//    public Optional<User> getMyUserWithAuthorities() {
+//        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+//    }
+
+
 }
