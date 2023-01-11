@@ -1,7 +1,7 @@
 package com.backend.oauthlogin.jwt;
 
 import com.backend.oauthlogin.dto.TokenDto;
-import com.backend.oauthlogin.entity.Authority;
+import com.backend.oauthlogin.entity.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -36,7 +36,7 @@ public class TokenProvider {
     private Key key;
 
     public TokenProvider(
-            @Value("${jwt.secret}") String secretKey) {
+            @Value("${spring.jwt.secret}") String secretKey) {
            // JWT 토큰 생성 시 사용될 암호화 키 값 생성자에서 지정
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -82,9 +82,6 @@ public class TokenProvider {
     }
 
     public TokenDto createToken(String email) {
-        String authorities = Authority.builder()
-                .authorityName("ROLE_USER")
-                .build().toString();
 
         long now = (new Date()).getTime();   // 토큰의 만료 시간 설정
         Date accessTokenExpireTime = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
@@ -92,7 +89,7 @@ public class TokenProvider {
         // JWT Access Token 생성 -> 유저와 권한 정보를 담는다.
         String accessToken = Jwts.builder()
                 .setSubject(email)    // payload "sub" : "name"
-                .claim(AUTHORITIES_KEY, authorities)     // payload "auth" : "ROLE_USER"
+                .claim(AUTHORITIES_KEY, Role.ROLE_USER)     // payload "auth" : "ROLE_USER"
                 .signWith(key, SignatureAlgorithm.HS512) // header "alg" : HS512 (해싱 알고리즘)
                 .setExpiration(accessTokenExpireTime)    // payload "exp" (10자리)
                 .compact();
