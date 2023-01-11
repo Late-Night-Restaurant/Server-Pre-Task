@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // username으로 User 정보를 가져올 때, 권한 정보도 함께 가져오게 해주는 메소드
-    @EntityGraph(attributePaths = "authorities")    // @EntityGraph: 쿼리가 수행될 때, Lazy 조회가 아닌 Eager 조회로 authorities 정보를 가져옴
-    Optional<User> findOneWithAuthoritiesByUsername(String username);
+
+    Optional<User> findUserByEmail(String email);
+    boolean existsByEmail(String email);
+
 }
