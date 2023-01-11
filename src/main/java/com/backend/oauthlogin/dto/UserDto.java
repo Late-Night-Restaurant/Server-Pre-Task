@@ -5,6 +5,7 @@ import com.backend.oauthlogin.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,6 +17,7 @@ import static com.backend.oauthlogin.entity.Role.ROLE_USER;
 @NoArgsConstructor
 public class UserDto {
 
+    @Email
     @NotNull
     @Size(min = 3, max = 50)
     private String email;

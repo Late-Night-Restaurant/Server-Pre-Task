@@ -1,10 +1,8 @@
 package com.backend.oauthlogin.controller;
 
-import com.backend.oauthlogin.config.BaseResponse;
 import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.UserDto;
-import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.response.Response;
 import com.backend.oauthlogin.service.AuthService;
 import com.backend.oauthlogin.service.UserService;

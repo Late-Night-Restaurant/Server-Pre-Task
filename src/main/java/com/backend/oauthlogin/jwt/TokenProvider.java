@@ -163,7 +163,7 @@ public class TokenProvider {
     }
 
     // 토큰을 파라미터로 받아 클레임 생성 (토큰의 만료 여부와 상관없이 정보를 꺼낼 수 있음)
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)

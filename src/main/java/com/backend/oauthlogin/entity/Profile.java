@@ -1,5 +1,6 @@
 package com.backend.oauthlogin.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Profile extends BaseTimeEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @Column(name = "nickname", length = 50)

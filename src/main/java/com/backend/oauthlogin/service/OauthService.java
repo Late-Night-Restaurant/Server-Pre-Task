@@ -1,10 +1,6 @@
 package com.backend.oauthlogin.service;
 
-import com.backend.oauthlogin.config.BaseException;
-import com.backend.oauthlogin.config.BaseResponseStatus;
-import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
-import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoAccountDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoTokenDto;
 import com.backend.oauthlogin.entity.RefreshToken;
@@ -26,11 +22,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
-import java.util.Date;
-
 import static com.backend.oauthlogin.entity.LoginType.KAKAO;
 import static com.backend.oauthlogin.entity.Role.ROLE_USER;
-import static org.springframework.security.config.Elements.JWT;
 
 @Service
 @Slf4j

@@ -1,4 +1,4 @@
-package com.backend.oauthlogin.config;
+package com.backend.oauthlogin.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
