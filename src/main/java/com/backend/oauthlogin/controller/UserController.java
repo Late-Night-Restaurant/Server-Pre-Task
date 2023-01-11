@@ -1,11 +1,18 @@
 package com.backend.oauthlogin.controller;
 
 import com.backend.oauthlogin.config.BaseResponse;
+import com.backend.oauthlogin.dto.LoginDto;
+import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.UserDto;
 import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.service.AuthService;
 import com.backend.oauthlogin.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,6 +23,7 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     /**
      * 회원가입 API
@@ -26,6 +34,15 @@ public class UserController {
         return new BaseResponse<>(userService.signup(userDto));
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
+
+        Authentication authentication = authService.authenticateProto(loginDto); // 인증
+        TokenDto tokenDto = authService.authorizeProto(authentication.getName()); // 인가, 토큰발행
+        HttpHeaders headers = authService.inputTokenInHeader(tokenDto); // 토큰 헤더에 넣기
+
+        return new ResponseEntity<>(tokenDto, headers, HttpStatus.OK);   // ResponseBody 에도 실어서 응답을 반환
+    }
     /**
      * 유저 정보, 권한 정보 조회 API
      * - My : 일반 사용자는 자신의 개인정보 조회만 가능
