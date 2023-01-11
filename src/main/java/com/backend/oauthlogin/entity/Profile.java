@@ -32,6 +32,9 @@ public class Profile extends BaseTimeEntity {
     @Column(name = "picture")
     private String picture;
 
+    @Column(name = "is_represent")
+    private boolean isRepresent;
+
     @Column(name = "activated")
     private boolean activated;
 

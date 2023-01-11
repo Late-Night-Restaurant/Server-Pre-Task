@@ -8,6 +8,9 @@ import lombok.*;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,21 +31,18 @@ public class User extends BaseTimeEntity implements UserDetails {
     private Long userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "login_type", nullable = false)
+    @Column(name = "login_type")
     private LoginType loginType;
 
-    @Column(name = "email", length = 50, unique = true, nullable = false)
+    @Column(name = "email", length = 50, unique = true)
     private String email;
 
-    @Column(name = "pw", length = 100, nullable = false)
+    @Column(name = "pw", length = 100)
     private String pw;
-
-    @Column(name = "nickname", length = 50)
-    private String nickname;
 
     @Column(name = "activated")
     private boolean activated;
@@ -51,7 +51,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Profile> profileList = new ArrayList<>();
-
 
 
     //== Spring Security 사용자 인증 필드 ==//
@@ -117,6 +116,6 @@ public class User extends BaseTimeEntity implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.activated;
     }
 }
