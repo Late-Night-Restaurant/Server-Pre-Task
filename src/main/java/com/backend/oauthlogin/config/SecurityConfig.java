@@ -5,6 +5,7 @@ import com.backend.oauthlogin.jwt.JwtAccessDeniedHandler;
 import com.backend.oauthlogin.jwt.JwtAuthenticationEntryPoint;
 import com.backend.oauthlogin.jwt.JwtSecurityConfig;
 import com.backend.oauthlogin.jwt.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity   // 기본적인 Web 보안 활성화
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     // jwt 디렉토리에 생성한 클래스들 SecurityConfig에 추가
@@ -31,13 +33,6 @@ public class SecurityConfig {
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
-    public SecurityConfig(TokenProvider tokenProvider, CorsFilter corsFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler) {
-        this.tokenProvider = tokenProvider;
-        this.corsFilter = corsFilter;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
 
     // 비밀번호 암호화
     @Bean
@@ -80,7 +75,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/", "/h2/**", "/api/login", "/api/authenticate", "/api/signup", "/auth/**", "/api/**").permitAll()
+                .antMatchers("/", "/h2/**", "/simya/form-login", "/simya/auth", "/simya/signup").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

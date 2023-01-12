@@ -5,6 +5,5 @@ public enum LoginType {
 
     FORM,
     GOOGLE,
-    KAKAO,
-    NAVER
+    KAKAO
 }
