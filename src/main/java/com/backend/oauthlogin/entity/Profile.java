@@ -1,5 +1,7 @@
 package com.backend.oauthlogin.entity;
 
+import com.backend.oauthlogin.dto.ProfileDeleteDto;
+import com.backend.oauthlogin.dto.ProfileUpdateDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
@@ -39,5 +41,36 @@ public class Profile extends BaseTimeEntity {
 
     @Column(name = "activated")
     private boolean activated;
+
+    public int isMainProfile() {
+        for (int i=0; i<user.getProfileList().size(); i++) {
+            if (user.getProfileList().get(i).isRepresent) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void selectMainProfile() {
+        isRepresent = true;
+    }
+
+    public void cancelMainProfile() {
+        isRepresent = false;
+    }
+
+    public Profile update(ProfileUpdateDto updateDto) {
+        this.nickname = updateDto.getNickname();
+        this.comment = updateDto.getComment();
+        this.picture = updateDto.getPicture();
+        this.isRepresent = updateDto.isRepresent();
+
+        return this;
+    }
+
+    public Profile delete(Long profileId) {
+        this.activated = false;
+        return this;
+    }
 
 }

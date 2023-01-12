@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ProfileUpdateDto {
 
-    @NotNull
     private Long profileId;
 
     private String nickname;
