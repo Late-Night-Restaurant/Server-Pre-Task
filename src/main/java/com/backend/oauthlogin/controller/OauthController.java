@@ -1,13 +1,7 @@
 package com.backend.oauthlogin.controller;
 
-import antlr.Token;
-import com.backend.oauthlogin.config.BaseResponse;
 import com.backend.oauthlogin.dto.TokenDto;
-import com.backend.oauthlogin.dto.oauth.LoginResponseDto;
-import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
-import com.backend.oauthlogin.dto.oauth.SignupResponseDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoTokenDto;
-import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.jwt.JwtFilter;
 import com.backend.oauthlogin.response.Response;
 import com.backend.oauthlogin.service.AuthService;
@@ -16,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor

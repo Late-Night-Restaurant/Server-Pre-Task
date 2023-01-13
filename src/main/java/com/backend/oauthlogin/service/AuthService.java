@@ -7,10 +7,14 @@ import com.backend.oauthlogin.dto.TokenRequestDto;
 import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
 import com.backend.oauthlogin.entity.RefreshToken;
 import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.exception.BaseException;
+import com.backend.oauthlogin.exception.BaseResponseStatus;
 import com.backend.oauthlogin.jwt.JwtFilter;
 import com.backend.oauthlogin.jwt.TokenProvider;
 import com.backend.oauthlogin.repository.RefreshTokenRepository;
 import com.backend.oauthlogin.repository.UserRepository;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -20,8 +24,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+
+
+import static com.backend.oauthlogin.exception.BaseResponseStatus.EMPTY_JWT;
+import static com.backend.oauthlogin.exception.BaseResponseStatus.INVALID_JWT;
 
 @Service
 @Slf4j
@@ -31,6 +41,7 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
     // Authencation 객체를 만들어 인증한 뒤, Context에 저장
     @Transactional
@@ -64,6 +75,51 @@ public class AuthService {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDto.getAccessToken());
         return httpHeaders;
     }
+
+    // 로그인한 사용자 여부에 대한 검증 시 Header 에서 토큰 값을 가져온다.
+    public String getJwt() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        log.info("AuthService - getJwt() : header에 저장된 Access Token {}", request.getHeader("Authorization"));
+        return request.getHeader("Authorization").substring(7);
+    }
+
+    public String getUsername() throws BaseException {
+        String accessToken = getJwt();
+        if (accessToken == null) {
+            throw new BaseException(EMPTY_JWT);
+        }
+        // TODO Access Token 만료 여부 체크 로직 추가
+
+        Claims claims;
+
+        try {
+            claims = tokenProvider.parseClaims(accessToken);
+        } catch (Exception e) {
+            throw new BaseException(INVALID_JWT);
+        }
+        log.info("AuthService - getUsername() : {}", claims);
+
+        return claims.get("sub", String.class);
+    }
+
+    public User authenticateUser() throws BaseException {
+        String username = getUsername();
+        return userRepository.findByEmail(username).orElseThrow();
+    }
+
+    public boolean validateClaim(String accessToken) {
+        try {
+            Claims claims = tokenProvider.parseClaims(accessToken);
+            return true;
+        } catch (ExpiredJwtException e) {
+            // TODO 토큰 만료 시, TokenRequestDto (AccessToken, RefreshToken 넘겨서 갱신)
+            return false;
+        }
+
+    }
+
+
+
 
     /**
      * 토큰 만료 시 재발급하는 메소드

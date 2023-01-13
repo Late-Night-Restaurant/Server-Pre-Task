@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,9 +45,10 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "activated")
     private boolean activated;
 
-    // 연관관계 메서드
+    // 연관관계 매핑
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Profile> profileList = new ArrayList<>();
 
 
@@ -116,5 +116,19 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.activated;
+    }
+
+    //== 연관관계 매핑 메서드 ==//
+    public void addProfile(Profile profile) {
+        profileList.add(profile);
+    }
+
+    public int getMainProfile() {
+        for (int i=0; i<profileList.size(); i++) {
+            if (profileList.get(i).isRepresent() && profileList.get(i).isActivated()) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
