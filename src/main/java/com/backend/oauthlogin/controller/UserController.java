@@ -3,8 +3,9 @@ package com.backend.oauthlogin.controller;
 import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.UserDto;
+import com.backend.oauthlogin.exception.BaseException;
+import com.backend.oauthlogin.exception.BaseResponse;
 import com.backend.oauthlogin.jwt.JwtFilter;
-import com.backend.oauthlogin.response.Response;
 import com.backend.oauthlogin.service.AuthService;
 import com.backend.oauthlogin.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +24,26 @@ public class UserController {
 
 
     @PostMapping("/form-signup")
-    public Response signup(@Valid @RequestBody UserDto userDto) {
-        return userService.formSignup(userDto);
+    public BaseResponse<UserDto> signup(@Valid @RequestBody UserDto userDto) throws BaseException {
+       try {
+           return new BaseResponse<>(userService.formSignup(userDto));
+       } catch (BaseException e) {
+           throw new BaseException(e.getStatus());
+       }
     }
 
     @GetMapping("/form-login")
-    public Response formLogin(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
-        Response loginResponse = authService.login(loginDto);
-        if (loginResponse.getIsSuccess()) {
-            TokenDto tokenDto = (TokenDto) loginResponse.getData();
+    public BaseResponse<TokenDto> formLogin(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) throws BaseException {
+        try{
+            TokenDto tokenDto = authService.login(loginDto);
             String accessToken = tokenDto.getAccessToken();
             String refreshToken = tokenDto.getRefreshToken();
             response.addHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
             response.addHeader(JwtFilter.AUTHORIZATION_HEADER, "Refresh  " + refreshToken);// 토큰 헤더에 넣기
+            return new BaseResponse<>(tokenDto);
+        } catch (BaseException e) {
+            throw new BaseException(e.getStatus());
         }
-        return loginResponse;
     }
 
 //    @GetMapping("/user")
