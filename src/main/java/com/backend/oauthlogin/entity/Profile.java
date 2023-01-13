@@ -42,21 +42,14 @@ public class Profile extends BaseTimeEntity {
     @Column(name = "activated")
     private boolean activated;
 
-    public int isMainProfile() {
-        for (int i=0; i<user.getProfileList().size(); i++) {
-            if (user.getProfileList().get(i).isRepresent) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     public void selectMainProfile() {
-        isRepresent = true;
+        this.isRepresent = true;
+        System.out.println("Profile Entity - selectMainProfile() 실행");
     }
 
     public void cancelMainProfile() {
-        isRepresent = false;
+        this.isRepresent = false;
     }
 
     public Profile update(ProfileUpdateDto updateDto) {

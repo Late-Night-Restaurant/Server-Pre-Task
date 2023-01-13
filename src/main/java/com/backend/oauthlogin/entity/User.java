@@ -122,4 +122,13 @@ public class User extends BaseTimeEntity implements UserDetails {
     public void addProfile(Profile profile) {
         profileList.add(profile);
     }
+
+    public int getMainProfile() {
+        for (int i=0; i<profileList.size(); i++) {
+            if (profileList.get(i).isRepresent() && profileList.get(i).isActivated()) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

@@ -3,6 +3,7 @@ package com.backend.oauthlogin.controller;
 import com.backend.oauthlogin.dto.ProfileRequestDto;
 import com.backend.oauthlogin.dto.ProfileResponseDto;
 import com.backend.oauthlogin.dto.ProfileUpdateDto;
+import com.backend.oauthlogin.entity.Profile;
 import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.exception.BaseException;
 import com.backend.oauthlogin.exception.BaseResponse;
@@ -65,4 +66,15 @@ public class ProfileController {
         return new BaseResponse<>(result);
     }
 
+    @PatchMapping("/{profileId}/main")
+    public BaseResponse<String> setMainProfile(@PathVariable("profileId") Long profileId) {
+        profileService.setMainProfile(profileId);
+        String result = "메인 프로필이 변경되었습니다.";
+        return new BaseResponse<>(result);
+    }
+
+    @GetMapping("/{profileId}")
+    public BaseResponse<Profile> getProfileInfo(@PathVariable("profileId") Long profileId) {
+        return new BaseResponse<Profile>(profileService.getProfileInfo(profileId));
+    }
 }
