@@ -8,11 +8,12 @@ import com.backend.oauthlogin.entity.Profile;
 import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.exception.BaseException;
 import com.backend.oauthlogin.repository.ProfileRepository;
-import com.backend.oauthlogin.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.backend.oauthlogin.exception.BaseResponseStatus.*;
 
 
 @Slf4j
@@ -30,20 +31,26 @@ public class ProfileService {
             profile.getUser().addProfile(profile);
             Long profileId = profileRepository.save(profile).getProfileId();
             return new ProfileResponseDto(profileId, profile.getNickname(), profile.getUser());
-        } catch (Exception e) {
-            throw new BaseException(ResponseStatus.DATABASE_ERROR);
+        } catch (Exception ignored) {
+            throw new BaseException(DATABASE_ERROR);
         }
 
     }
 
     @Transactional
-    public void updateProfile(ProfileUpdateDto profileUpdateDto) {
-        Profile profile = getProfileInfo(profileUpdateDto.getProfileId());
-        profile.update(profileUpdateDto);
+    public void updateProfile(ProfileUpdateDto profileUpdateDto) throws BaseException {
+
+        try {
+            Profile profile = getProfileInfo(profileUpdateDto.getProfileId());
+            profile.update(profileUpdateDto);
+        } catch (Exception ignored) {
+            throw new BaseException(UPDATE_FAIL_PROFILE);
+        }
+
     }
 
     // 대표 프로필은 하나만 지정 가능
-    public void setMainProfile(Long profileId) {
+    public void setMainProfile(Long profileId) throws BaseException {
         Profile profile = getProfileInfo(profileId);
         User user = profile.getUser();
 
@@ -60,12 +67,18 @@ public class ProfileService {
     }
 
     @Transactional
-    public void deleteProfile(Long profileId) {
-        Profile profile = getProfileInfo(profileId);
-        profile.delete(profileId);
+    public void deleteProfile(Long profileId) throws BaseException {
+        try {
+            Profile profile = getProfileInfo(profileId);
+            profile.delete(profileId);
+        } catch (Exception ignored) {
+            throw new BaseException(DELETE_FAIL_PROFILE);
+        }
     }
 
-    public Profile getProfileInfo(Long profileId) {
-        return profileRepository.findById(profileId).orElseThrow();
+    public Profile getProfileInfo(Long profileId) throws BaseException {
+        return profileRepository.findById(profileId).orElseThrow(
+                () -> new BaseException(DATABASE_ERROR)
+        );
     }
 }

@@ -24,6 +24,7 @@ public enum BaseResponseStatus {
     INVALID_USER_JWT(false, 2003, "권한이 없는 유저의 접근입니다."),
 
     // user 관련
+    USERS_NOT_AUTHORIZED(false, 2009, "인가되지 않은 사용자입니다."),
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요"),
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
@@ -55,7 +56,8 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERNAME(false, 4014, "회원 이름을 변경하는 데 실패했습니다."),
     MODIFY_FAIL_POSTS_INFO(false, 4015, "게시글 정보 수정에 실패했습니다."),
 
-    DELETE_FAIL_POST(false, 4100, "게시글 삭제에 실패했습니다."),
+    DELETE_FAIL_PROFILE(false, 4100, "프로필 삭제에 실패했습니다."),
+    UPDATE_FAIL_PROFILE(false, 4100, "프로필 수정에 실패했습니다."),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패했습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패했습니다.");
