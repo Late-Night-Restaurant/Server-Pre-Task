@@ -8,12 +8,12 @@ import com.backend.oauthlogin.entity.Profile;
 import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.exception.BaseException;
 import com.backend.oauthlogin.repository.ProfileRepository;
+import com.backend.oauthlogin.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.backend.oauthlogin.exception.BaseResponseStatus.DATABASE_ERROR;
 
 @Slf4j
 @Service
@@ -24,11 +24,16 @@ public class ProfileService {
 
     @Transactional
     public ProfileResponseDto createProfile(ProfileRequestDto profileRequestDto) throws BaseException {
-        Profile profile = profileRequestDto.toEntity();
-        profile.getUser().addProfile(profile);
-        Long profileId = profileRepository.save(profile).getProfileId();
 
-        return new ProfileResponseDto(profileId, profile.getNickname(), profile.getUser());
+        try {
+            Profile profile = profileRequestDto.toEntity();
+            profile.getUser().addProfile(profile);
+            Long profileId = profileRepository.save(profile).getProfileId();
+            return new ProfileResponseDto(profileId, profile.getNickname(), profile.getUser());
+        } catch (Exception e) {
+            throw new BaseException(ResponseStatus.DATABASE_ERROR);
+        }
+
     }
 
     @Transactional
