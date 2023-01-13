@@ -129,28 +129,21 @@ public class OauthService {
     public TokenDto saveKakaoUser(String token) {
 
         KakaoAccountDto kakaoAccount = getKakaoInfo(token);
-        log.info("OauthService - saveKakaoUser() kakaoInfo 받아오기 성공 : {}", kakaoAccount);
+        String email = kakaoAccount.getKakao_account().getEmail();
 
-        User user = null;
-//        User user = userRepository.findByEmail(kakaoAccount.getKakao_account().getEmail()).orElseThrow(null);
-        log.info("userRepository 에 중복된 이메일이 없으므로 자체 유저 객체로 생성");
-        if (user == null) {
-            user = User.builder()
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException("중복된 이메일의 유저가 있습니다");
+        } else {
+            User newKakaoUser = User.builder()
                     .email(kakaoAccount.getKakao_account().getEmail())
                     .pw("change your password!")
                     .loginType(KAKAO)
                     .role(ROLE_USER)
                     .activated(true)
                     .build();
-            userRepository.save(user);
+            userRepository.save(newKakaoUser);
         }
-        log.info("UserRepository에 카카오 유저저장(JWT 토큰 발급 이전) : {}", user);
-        /*LoginDto loginDto = LoginDto.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .build();
-        return authService.authenticate(loginDto);*/
-        return tokenProvider.createToken(user.getEmail());
+        return tokenProvider.createToken(email);
     }
 
     public HttpHeaders setTokenHeaders(TokenDto tokenDto) {

@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/", "/h2/**", "/simya/form-login", "/simya/auth", "/simya/signup", "/api/**").permitAll()
+                .antMatchers("/", "/h2/**", "/simya/form-login", "/simya/auth", "/simya/form-signup", "/api/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
