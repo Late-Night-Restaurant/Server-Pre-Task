@@ -4,18 +4,14 @@ package com.backend.oauthlogin.service;
 import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.TokenRequestDto;
-import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
 import com.backend.oauthlogin.entity.RefreshToken;
 import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.exception.BaseException;
-import com.backend.oauthlogin.exception.BaseResponseStatus;
 import com.backend.oauthlogin.jwt.JwtFilter;
 import com.backend.oauthlogin.jwt.TokenProvider;
 import com.backend.oauthlogin.repository.RefreshTokenRepository;
 import com.backend.oauthlogin.repository.UserRepository;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import com.backend.oauthlogin.response.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -31,8 +27,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.backend.oauthlogin.exception.BaseResponseStatus.*;
 
-import static com.backend.oauthlogin.response.ResponseStatus.*;
 
 @Service
 @Slf4j
@@ -48,13 +44,12 @@ public class AuthService {
     // 롤백 문제 발생, @Transactional과 예외처리 관련
     // 왜 UsernameNotFound가 아닌 Exception이 올까?
     //@Transactional
-    public Response login(LoginDto loginDto) {
+    public TokenDto login(LoginDto loginDto) throws BaseException {
         try{
             Authentication authentication = authenticate(loginDto); // 인증
-            TokenDto tokenDto = authorize(authentication);
-            return Response.success(tokenDto); // 인가
+            return authorize(authentication);
         } catch (Exception e) {
-            return Response.failure(FAILED_TO_LOGIN);
+            throw new BaseException(FAILED_TO_LOGIN);
         }
     }
 

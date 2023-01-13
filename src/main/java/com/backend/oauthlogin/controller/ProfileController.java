@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import static com.backend.oauthlogin.exception.BaseResponseStatus.USERS_NOT_AUTHORIZED;
 
 
+
 @Slf4j
 @RestController
 @RequestMapping("/users/profile")
@@ -51,7 +52,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/{profileId}")
-    public BaseResponse<String> updateProfile(@PathVariable("profileId") Long profileId, @RequestBody ProfileUpdateDto profileUpdateDto) throws BaseException {
+    public BaseResponse<String> updateProfile(@PathVariable("profileId") Long profileId, @RequestBody ProfileUpdateDto profileUpdateDto) {
 
         try {
             profileUpdateDto.setProfileId(profileId);
@@ -65,7 +66,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/{profileId}/delete")
-    public BaseResponse<String> deleteProfile(@PathVariable("profileId") Long profileId) throws BaseException {
+    public BaseResponse<String> deleteProfile(@PathVariable("profileId") Long profileId) {
 
         try {
             profileService.deleteProfile(profileId);
@@ -77,7 +78,7 @@ public class ProfileController {
     }
 
     @PatchMapping("/{profileId}/main")
-    public BaseResponse<String> setMainProfile(@PathVariable("profileId") Long profileId) throws BaseException {
+    public BaseResponse<String> setMainProfile(@PathVariable("profileId") Long profileId) {
         try {
             profileService.setMainProfile(profileId);
             String result = "메인 프로필이 변경되었습니다.";
@@ -88,9 +89,9 @@ public class ProfileController {
     }
 
     @GetMapping("/{profileId}")
-    public BaseResponse<Profile> getProfileInfo(@PathVariable("profileId") Long profileId) throws BaseException {
+    public BaseResponse<Profile> getProfileInfo(@PathVariable("profileId") Long profileId) {
         try {
-        return new BaseResponse<Profile>(profileService.getProfileInfo(profileId));
+        return new BaseResponse<>(profileService.getProfileInfo(profileId));
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

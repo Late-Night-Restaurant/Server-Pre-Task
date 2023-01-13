@@ -1,12 +1,12 @@
 package com.backend.oauthlogin.service;
 
-import com.backend.oauthlogin.dto.ProfileDeleteDto;
 import com.backend.oauthlogin.dto.ProfileRequestDto;
 import com.backend.oauthlogin.dto.ProfileResponseDto;
 import com.backend.oauthlogin.dto.ProfileUpdateDto;
 import com.backend.oauthlogin.entity.Profile;
 import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.exception.BaseException;
+import com.backend.oauthlogin.exception.BaseResponseStatus;
 import com.backend.oauthlogin.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
