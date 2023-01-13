@@ -3,6 +3,7 @@ package com.backend.oauthlogin.service;
 import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -24,10 +26,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     // 로그인 시 DB에서 유저정보와 권한정보를 가져오고, 이를 기반으로 userdetails User 객체를 생성
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String username) {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
                 .map(user -> createUser(username, user))
-                .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+                .orElseThrow(() ->  new UsernameNotFoundException("회원을 찾을 수 없습니다."));
     }
 
     private UserDetails createUser(String username, User user) {
