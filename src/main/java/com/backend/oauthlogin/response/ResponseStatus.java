@@ -1,4 +1,4 @@
-package com.backend.oauthlogin.config;
+package com.backend.oauthlogin.response;
 
 import lombok.Getter;
 
@@ -6,12 +6,10 @@ import lombok.Getter;
  * 에러 코드 관리 : 임의로 코드와 메시지 지정
  */
 @Getter
-public enum BaseResponseStatus {
+public enum ResponseStatus {
 
-    /**
-     * 1000 : 요청 성공
-     */
-    SUCCESS(true, 1000, "요청에 성공하였습니다."),
+
+    SUCCESS(true, 200, "요청에 성공하였습니다."),
 
 
     /**
@@ -41,8 +39,9 @@ public enum BaseResponseStatus {
 
     // user 관련
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
-    FAILED_TO_LOGIN(false, 3014, "존재하지 않는 아이디이거나 비밀번호가 틀렸습니다."),
-    BANNED_USER_IN_LOGIN(false, 3015, "정지된 유저이므로 로그인이 불가합니다."),
+    FAILED_TO_LOGIN(false, 3014, "존재하지 않는 이메일이거나 비밀번호가 틀렸습니다."),
+    ANOTHER_LOGIN_TYPE(false, 3015, "카카오로 회원가입 된 유저입니다."),
+    BANNED_USER_IN_LOGIN(false, 3016, "정지된 유저이므로 로그인이 불가합니다."),
 
 
     /**
@@ -69,7 +68,7 @@ public enum BaseResponseStatus {
     private final int code;
     private final String message;
 
-    BaseResponseStatus(boolean isSuccess, int code, String message) {
+    ResponseStatus(boolean isSuccess, int code, String message) {
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;

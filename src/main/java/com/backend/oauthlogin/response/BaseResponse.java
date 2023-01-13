@@ -1,4 +1,4 @@
-package com.backend.oauthlogin.config;
+package com.backend.oauthlogin.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static com.backend.oauthlogin.config.BaseResponseStatus.SUCCESS;
+import static com.backend.oauthlogin.response.ResponseStatus.SUCCESS;
+
 
 @Getter
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class BaseResponse<T> {
     /**
      * 요청에 실패한 경우
      */
-    public BaseResponse(BaseResponseStatus status) {
+    public BaseResponse(ResponseStatus status) {
         this.isSuccess = status.isSuccess();
         this.code = status.getCode();
         this.message = status.getMessage();
