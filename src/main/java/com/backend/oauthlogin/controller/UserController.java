@@ -1,21 +1,16 @@
 package com.backend.oauthlogin.controller;
 
-import com.backend.oauthlogin.config.BaseResponse;
 import com.backend.oauthlogin.dto.LoginDto;
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.UserDto;
-import com.backend.oauthlogin.entity.User;
+import com.backend.oauthlogin.jwt.JwtFilter;
 import com.backend.oauthlogin.response.Response;
 import com.backend.oauthlogin.service.AuthService;
 import com.backend.oauthlogin.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -27,30 +22,33 @@ public class UserController {
     private final AuthService authService;
 
 
-    @PostMapping("/signup")
+    @PostMapping("/form-signup")
     public Response signup(@Valid @RequestBody UserDto userDto) {
-        return Response.success(userService.signup(userDto));
+        return userService.formSignup(userDto);
     }
 
     @GetMapping("/form-login")
-    public ResponseEntity<TokenDto> formLogin(@Valid @RequestBody LoginDto loginDto) {
-
-        Authentication authentication = authService.authenticate(loginDto); // 인증
-        TokenDto tokenDto = authService.authorize(authentication); // 인가, 토큰발행
-        HttpHeaders headers = authService.inputTokenInHeader(tokenDto); // 토큰 헤더에 넣기
-
-        return new ResponseEntity<>(tokenDto, headers, HttpStatus.OK);
+    public Response formLogin(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
+        Response loginResponse = authService.login(loginDto);
+        if (loginResponse.getIsSuccess()) {
+            TokenDto tokenDto = (TokenDto) loginResponse.getData();
+            String accessToken = tokenDto.getAccessToken();
+            String refreshToken = tokenDto.getRefreshToken();
+            response.addHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
+            response.addHeader(JwtFilter.AUTHORIZATION_HEADER, "Refresh  " + refreshToken);// 토큰 헤더에 넣기
+        }
+        return loginResponse;
     }
 
-    @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")  // USER, ADMIN 권한 모두 허용
-    public Response getMyUserInfo() {
-        return Response.success(userService.getMyUserWithAuthorities().get());
-    }
+//    @GetMapping("/user")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")  // USER, ADMIN 권한 모두 허용
+//    public Response getMyUserInfo() {
+//        return Response.success(userService.getMyUserWithAuthorities().get());
+//    }
 
-    @GetMapping("/user/{username}")
-    @PreAuthorize("hasAnyRole('ADMIN')")   // ADMIN 권한만 허용 -> API를 호출 가능한 권한을 제한함
-    public Response getUserInfo(@PathVariable String username) {
-        return Response.success(userService.getUserWithAuthorities(username).get());
-    }
+//    @GetMapping("/user/{username}")
+//    @PreAuthorize("hasAnyRole('ADMIN')")   // ADMIN 권한만 허용 -> API를 호출 가능한 권한을 제한함
+//    public Response getUserInfo(@PathVariable String username) {
+//        return Response.success(userService.getUserWithAuthorities(username).get());
+//    }
 }
