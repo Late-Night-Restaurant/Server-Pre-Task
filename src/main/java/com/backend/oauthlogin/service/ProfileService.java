@@ -1,6 +1,5 @@
 package com.backend.oauthlogin.service;
 
-import com.backend.oauthlogin.dto.ProfileDeleteDto;
 import com.backend.oauthlogin.dto.ProfileRequestDto;
 import com.backend.oauthlogin.dto.ProfileResponseDto;
 import com.backend.oauthlogin.dto.ProfileUpdateDto;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.backend.oauthlogin.exception.BaseResponseStatus.DATABASE_ERROR;
 
 @Slf4j
 @Service
