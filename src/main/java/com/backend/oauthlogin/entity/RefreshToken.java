@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "refresh_token")
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class RefreshToken {
 

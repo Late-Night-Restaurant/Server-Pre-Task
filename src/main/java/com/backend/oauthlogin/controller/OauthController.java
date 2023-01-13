@@ -1,22 +1,15 @@
 package com.backend.oauthlogin.controller;
 
-import antlr.Token;
-import com.backend.oauthlogin.config.BaseResponse;
 import com.backend.oauthlogin.dto.TokenDto;
-import com.backend.oauthlogin.dto.oauth.LoginResponseDto;
-import com.backend.oauthlogin.dto.oauth.SignupRequestDto;
-import com.backend.oauthlogin.dto.oauth.SignupResponseDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoTokenDto;
-import com.backend.oauthlogin.entity.User;
 import com.backend.oauthlogin.jwt.JwtFilter;
+import com.backend.oauthlogin.response.Response;
 import com.backend.oauthlogin.service.AuthService;
 import com.backend.oauthlogin.service.OauthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -103,9 +96,9 @@ public class OauthController {
     }
 
     @GetMapping("/api/code")
-    public BaseResponse<String> code(@RequestParam("code") String code) {
+    public Response code(@RequestParam("code") String code) {
         String message = "성공적으로 카카오 유저 토큰 발급이 완료되었습니다.";
-        return new BaseResponse<>(message);
+        return Response.success(message);
     }
 
     // 인가코드 과정 없이 바로 맥세스 토큰 받아오기
@@ -118,3 +111,4 @@ public class OauthController {
         return ResponseEntity.ok().headers(headers).body(jwtTokenDto);
     }
 }
+// Response 커스텀해서 반환형식 일치시킴

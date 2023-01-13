@@ -30,23 +30,21 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // 회원가입 로직
     @Transactional
     public User signup(UserDto userDto) {
-        // username을 기준으로 이미 DB에 존재하는 유저인지 검사
-//        if (userRepository.findOneWithAuthoritiesByEmail(userDto.getEmail()).orElse(null) != null) {
-//            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
-//        }
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+        }
 
         User user = User.builder()
                 .email(userDto.getEmail())
-                .pw(passwordEncoder.encode(userDto.getPw()))
+                .pw(passwordEncoder.encode(userDto.getPassword()))
                 .loginType(LoginType.FORM)
                 .role(Role.ROLE_USER)
                 .activated(true)
                 .build();
 
-        return userRepository.save(user);   // 없으면 새로 유저 정보와 권한 정보 생성 후, DB에 저장
+        return userRepository.save(user);
     }
 
     //== 유저, 권한정보를 가져오는 메소드 ==//
