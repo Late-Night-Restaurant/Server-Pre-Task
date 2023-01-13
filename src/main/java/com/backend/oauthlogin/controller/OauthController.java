@@ -2,7 +2,7 @@ package com.backend.oauthlogin.controller;
 
 import com.backend.oauthlogin.dto.TokenDto;
 import com.backend.oauthlogin.dto.oauth.kakao.KakaoTokenDto;
-import com.backend.oauthlogin.response.Response;
+import com.backend.oauthlogin.exception.BaseResponse;
 import com.backend.oauthlogin.service.AuthService;
 import com.backend.oauthlogin.service.OauthService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.backend.oauthlogin.response.ResponseStatus.SUCCESS;
 
 
 @RestController
@@ -35,10 +34,10 @@ public class OauthController {
     }
 
     @GetMapping("/api/code")
-    public Response code(@RequestParam("code") String code) {
+    public BaseResponse<String> code(@RequestParam("code") String code) {
         String message = "성공적으로 카카오 유저 토큰 발급이 완료되었습니다.";
 
-        return Response.success(SUCCESS);
+        return new BaseResponse<>(message);
     }
 
     // 인가코드 과정 없이 바로 맥세스 토큰 받아오기
