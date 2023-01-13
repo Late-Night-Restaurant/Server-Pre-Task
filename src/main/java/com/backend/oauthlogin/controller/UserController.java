@@ -26,16 +26,16 @@ public class UserController {
 
 
     @PostMapping("/form-signup")
-    public BaseResponse<UserDto> signup(@Valid @RequestBody UserDto userDto) throws BaseException {
+    public BaseResponse<UserDto> signup(@Valid @RequestBody UserDto userDto) {
         try {
             return new BaseResponse<>(userService.formSignup(userDto));
         } catch (BaseException e) {
-            return new BaseException(e.getStatus());
+            return new BaseResponse<>(e.getStatus());
         }
     }
 
     @GetMapping("/form-login")
-    public BaseException formLogin(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) throws BaseException {
+    public BaseResponse<TokenDto> formLogin(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
         try{
             TokenDto tokenDto = authService.login(loginDto);
             String accessToken = tokenDto.getAccessToken();
@@ -44,7 +44,7 @@ public class UserController {
 //            response.addHeader(JwtFilter.AUTHORIZATION_HEADER, "Refresh  " + refreshToken);// 토큰 헤더에 넣기
             return new BaseResponse<>(tokenDto);
         } catch (BaseException e) {
-            return new BaseException(e.getStatus());
+            return new BaseResponse<>(e.getStatus());
         }
     }
 
