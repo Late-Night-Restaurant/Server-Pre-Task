@@ -11,6 +11,8 @@ import com.backend.oauthlogin.jwt.JwtFilter;
 import com.backend.oauthlogin.jwt.TokenProvider;
 import com.backend.oauthlogin.repository.RefreshTokenRepository;
 import com.backend.oauthlogin.repository.UserRepository;
+import com.backend.oauthlogin.response.Response;
+import com.backend.oauthlogin.response.ResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +20,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.backend.oauthlogin.response.ResponseStatus.*;
 
 @Service
 @Slf4j
@@ -32,9 +37,23 @@ public class AuthService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+
+    // 롤백 문제 발생, @Transactional과 예외처리 관련
+    // 왜 UsernameNotFound가 아닌 Exception이 올까?
+    //@Transactional
+    public Response login(LoginDto loginDto) {
+        try{
+            Authentication authentication = authenticate(loginDto); // 인증
+            TokenDto tokenDto = authorize(authentication);
+            return Response.success(tokenDto); // 인가
+        } catch (Exception e) {
+            return Response.failure(FAILED_TO_LOGIN);
+        }
+    }
+
     // Authencation 객체를 만들어 인증한 뒤, Context에 저장
     @Transactional
-    public Authentication authenticate(LoginDto loginDto) {
+    public Authentication authenticate(LoginDto loginDto) throws UsernameNotFoundException {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
