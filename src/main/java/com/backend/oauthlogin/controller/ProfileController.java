@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.backend.oauthlogin.exception.BaseResponseStatus.DATABASE_ERROR;
+import static com.backend.oauthlogin.exception.BaseResponseStatus.USERS_NOT_AUTHORIZED;
+
 
 
 @Slf4j
@@ -33,44 +34,66 @@ public class ProfileController {
 
 //        User user = authService.authenticateUser();  // 현재 접속한 유저
         User user = userService.getMyUserWithAuthorities().orElseThrow(
-                () -> new BaseException(DATABASE_ERROR)
+                () -> new BaseException(USERS_NOT_AUTHORIZED)
         );
         log.info("ProfileController - user: {}", user);
         if (user == null) {
             return new BaseResponse("존재하지 않는 사용자입니다.");   // TODO Custom Status ENUM 으로 만들어서 관리
         }
-        profileRequestDto.setUserProfile(user);
-        ProfileResponseDto profileResponseDto = profileService.createProfile(profileRequestDto);
 
-        return new BaseResponse<>(profileResponseDto);
+        try {
+            profileRequestDto.setUserProfile(user);
+            ProfileResponseDto profileResponseDto = profileService.createProfile(profileRequestDto);
+
+            return new BaseResponse<>(profileResponseDto);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 
     @PatchMapping("/{profileId}")
     public BaseResponse<String> updateProfile(@PathVariable("profileId") Long profileId, @RequestBody ProfileUpdateDto profileUpdateDto) {
-        profileUpdateDto.setProfileId(profileId);
-        profileService.updateProfile(profileUpdateDto);
 
-        String result = "프로필 수정이 완료되었습니다.";
-        return new BaseResponse<>(result);
+        try {
+            profileUpdateDto.setProfileId(profileId);
+            profileService.updateProfile(profileUpdateDto);
+
+            String result = "프로필 수정이 완료되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 
     @PatchMapping("/{profileId}/delete")
     public BaseResponse<String> deleteProfile(@PathVariable("profileId") Long profileId) {
-        profileService.deleteProfile(profileId);
 
-        String result = "프로필이 삭제되었습니다.";
-        return new BaseResponse<>(result);
+        try {
+            profileService.deleteProfile(profileId);
+            String result = "프로필이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 
     @PatchMapping("/{profileId}/main")
     public BaseResponse<String> setMainProfile(@PathVariable("profileId") Long profileId) {
-        profileService.setMainProfile(profileId);
-        String result = "메인 프로필이 변경되었습니다.";
-        return new BaseResponse<>(result);
+        try {
+            profileService.setMainProfile(profileId);
+            String result = "메인 프로필이 변경되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 
     @GetMapping("/{profileId}")
     public BaseResponse<Profile> getProfileInfo(@PathVariable("profileId") Long profileId) {
-        return new BaseResponse<Profile>(profileService.getProfileInfo(profileId));
+        try {
+        return new BaseResponse<>(profileService.getProfileInfo(profileId));
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 }
